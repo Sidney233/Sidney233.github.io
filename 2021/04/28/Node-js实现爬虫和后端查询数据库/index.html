@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+
+  
+    <meta name="description" content="博客网站搭建中~">
+  
+
+  
+
+  
+    <meta name="author" content="Sidney">
+  
+
+  
+
+  
+
+  <title>Node.js实现爬虫和后端查询数据库 | Sidney</title>
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@1.1.3/index.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs@9.16.2/styles/monokai.css">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div class="root-container">
+    <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Sidney
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">HOME</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    
+<!-- header container -->
+<header class="header-container post">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      
+        <div class="post-image" style="background-image: url(https://i.loli.net/2021/04/29/7hWYOio4tbqI8FE.jpg)"></div>
+      
+
+      <div class="post-text">
+        <div class="type-wrap">
+          <a class="article-category-link" href="/categories/Web%E7%BC%96%E7%A8%8B/">Web编程</a>
+        </div>
+        <h1 class="title-wrap">Node.js实现爬虫和后端查询数据库</h1>
+        <h2 class="title-sub-wrap">
+          <strong>Sidney</strong>
+          <span>发布于</span>
+          
+  <a href="javascript:;" class="article-date">
+    <time datetime="2021-04-28T12:59:00.000Z" itemprop="datePublished">2021-04-28</time>
+  </a>
+
+        </h2>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+
+<div class="body-container">
+  <article class="content-container article-container">
+    <div class="article-content">
+      
+      
+
+      <section class="article-entry">
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这是一个大三才学Web编程的苦逼数据专业中下游学生的期中作业，大概用Node.js写了一个小爬虫，然后用Node.js搭建了一个可以查询数据库的后端。</p>
+<h2 id="分析种子网站"><a href="#分析种子网站" class="headerlink" title="分析种子网站"></a>分析种子网站</h2><p>第一个目标是腾讯新闻，打开腾讯新闻的网站：<a target="_blank" rel="noopener" href="https://www.qq.com/">腾讯首页 (qq.com)</a></p>
+<p><img src="https://i.loli.net/2021/04/29/LgrEobdlmc8vI6Y.png" alt="Snipaste_2021-04-29_08-58-21.png"></p>
+<p>查看其源代码发现文章的url格式为</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://new.qq.com/omn/20210428/20210428A05F5600.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/04/29/cJWwBaAsbjCvXG6.png" alt="Snipaste_2021-04-29_09-00-55.png"></p>
+<p>则对应的正则表达式为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> url_reg = <span class="hljs-regexp">/omn\/(\d&#123;8&#125;)\/([A-Z0-9]&#123;16&#125;).html/</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="分析新闻页面"><a href="#分析新闻页面" class="headerlink" title="分析新闻页面"></a>分析新闻页面</h2><p>对于其中一篇文章，查看其源代码，发现我们需要的几个属性分别对应的标签如下</p>
+<p><img src="https://i.loli.net/2021/04/29/B7NAEVhTGYWxJdR.png" alt="Snipaste_2021-04-29_09-03-35.png"></p>
+<p><img src="https://i.loli.net/2021/04/29/N7jdluSH2gmDaOF.png" alt="Snipaste_2021-04-29_09-05-48.png"></p>
+<p>则代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> keywords_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;keywords\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> title_format = <span class="hljs-string">&quot;$(&#x27;title&#x27;).text()&quot;</span>;<br><span class="hljs-keyword">var</span> date_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;apub:time\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> author_format = <span class="hljs-string">&quot;&quot;</span>;<span class="hljs-comment">//腾讯的新闻页面没有作者或者编辑相关字段</span><br><span class="hljs-keyword">var</span> content_format = <span class="hljs-string">&quot;$(&#x27;.one-p&#x27;).text()&quot;</span>;<br><span class="hljs-keyword">var</span> desc_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;description\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> source_format = <span class="hljs-string">&quot;&quot;</span>;<span class="hljs-comment">//腾讯的新闻页面没有source相关字段</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="编写爬虫代码"><a href="#编写爬虫代码" class="headerlink" title="编写爬虫代码"></a>编写爬虫代码</h2><p>导入需要使用的包，其中mysql.js是另外一个用于连接mysql的文件</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);<br><span class="hljs-keyword">var</span> myRequest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;request&#x27;</span>)<br><span class="hljs-keyword">var</span> myCheerio = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;cheerio&#x27;</span>)<br><span class="hljs-keyword">var</span> myIconv = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;iconv-lite&#x27;</span>)<br><span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./mysql.js&#x27;</span>);<br><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;date-utils&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>一些变量的设置</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//防止网站屏蔽我们的爬虫</span><br><span class="hljs-keyword">var</span> headers = &#123;<br>    <span class="hljs-string">&#x27;User-Agent&#x27;</span>: <span class="hljs-string">&#x27;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1&#x27;</span><br>&#125;<br><br><span class="hljs-comment">//request模块异步fetch url</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">request</span>(<span class="hljs-params">url, callback</span>) </span>&#123;<br>    <span class="hljs-keyword">var</span> options = &#123;<br>        url: url,<br>        encoding: <span class="hljs-literal">null</span>,<br>        <span class="hljs-comment">//proxy: &#x27;http://x.x.x.x:8080&#x27;,</span><br>        headers: headers,<br>        timeout: <span class="hljs-number">10000</span> <span class="hljs-comment">//</span><br>    &#125;<br>    myRequest(options, callback)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中请求头(headers)使用的Windows下的Chrome，然后定义request函数用于获取种子网页(html)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">request(seedURL, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, res, body</span>) </span>&#123; <span class="hljs-comment">//读取种子页面</span><br>    <span class="hljs-comment">// try &#123;</span><br>    <span class="hljs-comment">//用iconv转换编码</span><br>    <span class="hljs-keyword">var</span> html = myIconv.decode(body, myEncoding);<br>    <span class="hljs-comment">//console.log(html);</span><br>    <span class="hljs-comment">//准备用cheerio解析html</span><br>    <span class="hljs-keyword">var</span> $ = myCheerio.load(html, &#123; <span class="hljs-attr">decodeEntities</span>: <span class="hljs-literal">true</span> &#125;);<br>    <span class="hljs-comment">// &#125; catch (e) &#123; console.log(&#x27;读种子页面并转码出错：&#x27; + e) &#125;;</span><br><br>    <span class="hljs-keyword">var</span> seedurl_news;<br><br>    <span class="hljs-keyword">try</span> &#123;<br>        seedurl_news = <span class="hljs-built_in">eval</span>(seedURL_format);<br>        <span class="hljs-comment">//console.log(seedurl_news);</span><br>    &#125; <span class="hljs-keyword">catch</span> (e) &#123; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;url列表所处的html块识别出错：&#x27;</span> + e) &#125;;<br><br>    seedurl_news.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, e</span>) </span>&#123; <span class="hljs-comment">//遍历种子页面里所有的a链接</span><br>        <span class="hljs-keyword">var</span> myURL = <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//得到具体新闻url</span><br>            <span class="hljs-keyword">var</span> href = <span class="hljs-string">&quot;&quot;</span>;<br>            href = $(e).attr(<span class="hljs-string">&quot;href&quot;</span>);<br>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span>(href) == <span class="hljs-string">&quot;undefined&quot;</span>) &#123;  <span class="hljs-comment">// 有些网页地址undefined</span><br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (href.toLowerCase().indexOf(<span class="hljs-string">&#x27;http://&#x27;</span>) &gt;= <span class="hljs-number">0</span> || href.toLowerCase().indexOf(<span class="hljs-string">&#x27;https://&#x27;</span>) &gt;= <span class="hljs-number">0</span>) myURL = href; <span class="hljs-comment">//http://开头的或者https://开头</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (href.startsWith(<span class="hljs-string">&#x27;//&#x27;</span>)) myURL = <span class="hljs-string">&#x27;http:&#x27;</span> + href; <span class="hljs-comment">////开头的</span><br>            <span class="hljs-keyword">else</span> myURL = seedURL.substr(<span class="hljs-number">0</span>, seedURL.lastIndexOf(<span class="hljs-string">&#x27;/&#x27;</span>) + <span class="hljs-number">1</span>) + href; <span class="hljs-comment">//其他</span><br><br>        &#125; <span class="hljs-keyword">catch</span> (e) &#123; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;识别种子页面中的新闻链接出错：&#x27;</span> + e) &#125;<br><br>        <span class="hljs-keyword">if</span> (!url_reg.test(myURL)) <span class="hljs-keyword">return</span>; <span class="hljs-comment">//检验是否符合新闻url的正则表达式</span><br>        <span class="hljs-comment">// console.log(myURL);</span><br>        <br>        <span class="hljs-keyword">var</span> fetch_url_Sql = <span class="hljs-string">&#x27;select url from fetches where url=?&#x27;</span>;<br>        <span class="hljs-keyword">var</span> fetch_url_Sql_Params = [myURL];<br>        mysql.query(fetch_url_Sql, fetch_url_Sql_Params, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">qerr, vals, fields</span>) </span>&#123;<br>            <span class="hljs-keyword">if</span> (vals.length &gt; <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;URL duplicate!&#x27;</span>)<br>            &#125; <span class="hljs-keyword">else</span> newsGet(myURL); <span class="hljs-comment">//读取新闻页面</span><br>        &#125;);<br>    &#125;);<br>&#125;);<br><br></code></pre></td></tr></table></figure>
+
+<p>大概逻辑为获取到种子网站后，遍历其中的所有的a标签，如果符合我们定义的新闻文章链接的正则表达式并且没有爬取过（即该url不存在数据库中），则调用newsGet函数获取文章内容，不符合或者已存在则查看下一个a标签</p>
+<p>newsGet函数如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">newsGet</span>(<span class="hljs-params">myURL</span>) </span>&#123; <span class="hljs-comment">//读取新闻页面</span><br>    request(myURL, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, res, body</span>) </span>&#123; <span class="hljs-comment">//读取新闻页面</span><br>        <span class="hljs-comment">//try &#123;</span><br>        <span class="hljs-keyword">var</span> html_news = myIconv.decode(body, myEncoding); <span class="hljs-comment">//用iconv转换编码</span><br>        <span class="hljs-comment">//console.log(html_news);</span><br>        <span class="hljs-comment">//准备用cheerio解析html_news</span><br>        <span class="hljs-keyword">var</span> $ = myCheerio.load(html_news, &#123; <span class="hljs-attr">decodeEntities</span>: <span class="hljs-literal">true</span> &#125;);<br>        myhtml = html_news;<br>        <span class="hljs-comment">//&#125; catch (e) &#123;    console.log(&#x27;读新闻页面并转码出错：&#x27; + e);&#125;;</span><br><br>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;转码读取成功:&quot;</span> + myURL);<br>        <span class="hljs-comment">//动态执行format字符串，构建json对象准备写入文件或数据库</span><br>        <span class="hljs-keyword">var</span> fetch = &#123;&#125;;<br>        fetch.title = <span class="hljs-string">&quot;&quot;</span>;<br>        fetch.content = <span class="hljs-string">&quot;&quot;</span>;<br>        fetch.publish_date = (<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()).toFormat(<span class="hljs-string">&quot;YYYY-MM-DD&quot;</span>);<br>        <span class="hljs-comment">//fetch.html = myhtml;</span><br>        fetch.url = myURL;<br>        fetch.source_name = source_name;<br>        fetch.source_encoding = myEncoding; <span class="hljs-comment">//编码</span><br>        fetch.crawltime = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();<br><br>        <span class="hljs-keyword">if</span> (keywords_format == <span class="hljs-string">&quot;&quot;</span>) fetch.keywords = source_name; <span class="hljs-comment">// eval(keywords_format);  //没有关键词就用sourcename</span><br>        <span class="hljs-keyword">else</span> fetch.keywords = <span class="hljs-built_in">eval</span>(keywords_format);<br><br>        <span class="hljs-keyword">if</span> (title_format == <span class="hljs-string">&quot;&quot;</span>) fetch.title = <span class="hljs-string">&quot;&quot;</span><br>        <span class="hljs-keyword">else</span> fetch.title = <span class="hljs-built_in">eval</span>(title_format); <span class="hljs-comment">//标题</span><br><br>        <span class="hljs-keyword">if</span> (date_format != <span class="hljs-string">&quot;&quot;</span>) fetch.publish_date = <span class="hljs-built_in">eval</span>(date_format); <span class="hljs-comment">//刊登日期   </span><br>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;date: &#x27;</span> + fetch.publish_date);<br>        <span class="hljs-built_in">console</span>.log(myURL);<br>        <span class="hljs-keyword">if</span> (fetch.title == <span class="hljs-string">&#x27;&#x27;</span>) &#123;<br>            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;此文章不存在&quot;</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        fetch.publish_date = regExp.exec(fetch.publish_date)[<span class="hljs-number">0</span>];<br>        fetch.publish_date = fetch.publish_date.replace(<span class="hljs-string">&#x27;年&#x27;</span>, <span class="hljs-string">&#x27;-&#x27;</span>)<br>        fetch.publish_date = fetch.publish_date.replace(<span class="hljs-string">&#x27;月&#x27;</span>, <span class="hljs-string">&#x27;-&#x27;</span>)<br>        fetch.publish_date = fetch.publish_date.replace(<span class="hljs-string">&#x27;日&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br>        fetch.publish_date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(fetch.publish_date).toFormat(<span class="hljs-string">&quot;YYYY-MM-DD&quot;</span>);<br><br>        <span class="hljs-keyword">if</span> (author_format == <span class="hljs-string">&quot;&quot;</span>) fetch.author = source_name; <span class="hljs-comment">//eval(author_format);  //作者</span><br>        <span class="hljs-keyword">else</span> fetch.author = <span class="hljs-built_in">eval</span>(author_format);<br><br>        <span class="hljs-keyword">if</span> (content_format == <span class="hljs-string">&quot;&quot;</span>) fetch.content = <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">else</span> fetch.content = <span class="hljs-built_in">eval</span>(content_format).replace(<span class="hljs-string">&quot;\r\n&quot;</span> + fetch.author, <span class="hljs-string">&quot;&quot;</span>); <span class="hljs-comment">//内容,是否要去掉作者信息自行决定</span><br><br>        <span class="hljs-keyword">if</span> (source_format == <span class="hljs-string">&quot;&quot;</span>) fetch.source = fetch.source_name;<br>        <span class="hljs-keyword">else</span> fetch.source = <span class="hljs-built_in">eval</span>(source_format).replace(<span class="hljs-string">&quot;\r\n&quot;</span>, <span class="hljs-string">&quot;&quot;</span>); <span class="hljs-comment">//来源</span><br><br>        <span class="hljs-keyword">if</span> (desc_format == <span class="hljs-string">&quot;&quot;</span>) fetch.desc = fetch.title;<br>        <span class="hljs-keyword">else</span> fetch.desc = <span class="hljs-built_in">eval</span>(desc_format).replace(<span class="hljs-string">&quot;\r\n&quot;</span>, <span class="hljs-string">&quot;&quot;</span>); <span class="hljs-comment">//摘要    </span><br><br>        <span class="hljs-keyword">var</span> fetchAddSql = <span class="hljs-string">&#x27;INSERT INTO fetches(url,source_name,source_encoding,title,&#x27;</span> +<br>            <span class="hljs-string">&#x27;keywords,author,publish_date,crawltime,content) VALUES(?,?,?,?,?,?,?,?,?)&#x27;</span>;<br>        <span class="hljs-keyword">var</span> fetchAddSql_Params = [fetch.url, fetch.source_name, fetch.source_encoding,<br>            fetch.title, fetch.keywords, fetch.author, fetch.publish_date,<br>            fetch.crawltime.toFormat(<span class="hljs-string">&quot;YYYY-MM-DD HH24:MI:SS&quot;</span>), fetch.content<br>        ];<br><br>        <span class="hljs-comment">//执行sql，数据库中fetch表里的url属性是unique的，不会把重复的url内容写入数据库</span><br>        mysql.query(fetchAddSql, fetchAddSql_Params, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">qerr, vals, fields</span>) </span>&#123;<br>            <span class="hljs-keyword">if</span> (qerr) &#123;<br>                <span class="hljs-built_in">console</span>.log(qerr);<br>            &#125;<br>        &#125;); <span class="hljs-comment">//mysql写入</span><br>    &#125;);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>这是爬虫的最重要的函数，用于读取解析一篇新闻，一些字段我们在开头定义了，用于获取文章标题发布日期等信息，其中日期的正则表达式为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> regExp = <span class="hljs-regexp">/\d&#123;1,2&#125;\/\d&#123;1,2&#125;\/\d&#123;4&#125;/</span><br></code></pre></td></tr></table></figure>
+
+<p>因为观察到腾讯新闻的日期格式为</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;apub:time&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;4/28/2021, 10:51:31 PM&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+<p>最后是写入mysql数据库，fetches表结构为</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Null</th>
+<th>Key</th>
+<th>Default</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id_fetches</td>
+<td>int</td>
+<td>NO</td>
+<td>PRI</td>
+<td>NULL</td>
+<td>auto_increment</td>
+</tr>
+<tr>
+<td>url</td>
+<td>varchar(200)</td>
+<td>YES</td>
+<td>UNI</td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>source_name</td>
+<td>varchar(200)</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>source_encoding</td>
+<td>varchar(45)</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>varchar(200)</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>keywords</td>
+<td>varchar(200)</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>author</td>
+<td>varchar(200)</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>publish_date</td>
+<td>date</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>crawltime</td>
+<td>datetime</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>YES</td>
+<td></td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>createtime</td>
+<td>datetime</td>
+<td>YES</td>
+<td></td>
+<td>CURRENT_TIMESTAMP</td>
+<td>DEFAULT_GENERATED</td>
+</tr>
+</tbody></table>
+<p>至此，爬虫部分结束，后续还爬取了一些其他新闻网站，并且其他新闻网站的页面大多比腾讯新闻更加简单，这里不再展示。</p>
+<h2 id="搭建查询Web服务器"><a href="#搭建查询Web服务器" class="headerlink" title="搭建查询Web服务器"></a>搭建查询Web服务器</h2><p>这里采用Node.js的express框架，首先在Node.js中安装express包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 在终端中执行</span><br>npm install express<br>npm install -g express-generator<br></code></pre></td></tr></table></figure>
+
+<p>安装完成后在目标文件夹下执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">express -e search_site	# -e的参数表明我们用ejs作为缺省view引擎，而非采用jade<br></code></pre></td></tr></table></figure>
+
+<p>会生成一个名为search_site的文件夹，目录结构如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">C:.<br>│  app.js<br>│  package.json<br>│<br>├─bin<br>│      www<br>│<br>├─public<br>│  ├─images<br>│  ├─javascripts<br>│  └─stylesheets<br>│          style.css<br>│<br>├─routes<br>│      index.js<br>│      users.js<br>│<br>└─views<br>        error.ejs<br>        index.ejs<br></code></pre></td></tr></table></figure>
+
+<p>把我们在爬虫中使用的mysql.js拷贝进该文件夹，然后在search_site文件夹中执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install mysql --save<br><span class="hljs-meta">#</span><span class="bash"> --save表示将mysql包安装到该项目中，并且将依赖项保存进package.json里</span><br>npm install<br><span class="hljs-meta">#</span><span class="bash"> 将package.json中列举的依赖项全部安装，完成网站搭建</span><br></code></pre></td></tr></table></figure>
+
+<p>package.json内容如下，包含了此项目必要的包</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json">&#123;<br>  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;search-site&quot;</span>,<br>  <span class="hljs-attr">&quot;version&quot;</span>: <span class="hljs-string">&quot;0.0.0&quot;</span>,<br>  <span class="hljs-attr">&quot;private&quot;</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-attr">&quot;scripts&quot;</span>: &#123;<br>    <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;node ./bin/www&quot;</span><br>  &#125;,<br>  <span class="hljs-attr">&quot;dependencies&quot;</span>: &#123;<br>    <span class="hljs-attr">&quot;cookie-parser&quot;</span>: <span class="hljs-string">&quot;~1.4.4&quot;</span>,<br>    <span class="hljs-attr">&quot;debug&quot;</span>: <span class="hljs-string">&quot;~2.6.9&quot;</span>,<br>    <span class="hljs-attr">&quot;ejs&quot;</span>: <span class="hljs-string">&quot;~2.6.1&quot;</span>,<br>    <span class="hljs-attr">&quot;express&quot;</span>: <span class="hljs-string">&quot;~4.16.1&quot;</span>,<br>    <span class="hljs-attr">&quot;http-errors&quot;</span>: <span class="hljs-string">&quot;~1.6.3&quot;</span>,<br>    <span class="hljs-attr">&quot;morgan&quot;</span>: <span class="hljs-string">&quot;~1.9.1&quot;</span>,<br>    <span class="hljs-attr">&quot;mysql&quot;</span>: <span class="hljs-string">&quot;^2.18.1&quot;</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>为了实现功能，我们先去修改路由（routes）。</p>
+<p>打开routes文件夹中的index.js，修改后如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">var</span> router = express.Router();<br><span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../mysql.js&#x27;</span>);<br><br><span class="hljs-comment">/* GET home page. */</span><br>router.get(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>&#123;<br>    res.render(<span class="hljs-string">&#x27;index&#x27;</span>, &#123; <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Express&#x27;</span> &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 新添加了一个路由，用做查询数据库并返回查询结果</span><br>router.get(<span class="hljs-string">&#x27;/process_get&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-comment">//sql字符串和参数</span><br>    <span class="hljs-keyword">var</span> fetchSql = <span class="hljs-string">&quot;select url,source_name,title,author,publish_date &quot;</span> +<br>        <span class="hljs-string">&quot;from fetches where title like &#x27;%&quot;</span> + request.query.title + <span class="hljs-string">&quot;%&#x27;&quot;</span>;<br>    mysql.query(fetchSql, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>        response.writeHead(<span class="hljs-number">200</span>, &#123;<br>            <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span><br>        &#125;);<br>        response.write(<span class="hljs-built_in">JSON</span>.stringify(result));<br>        response.end();<br>    &#125;);<br>&#125;);<br><br><span class="hljs-built_in">module</span>.exports = router;<br></code></pre></td></tr></table></figure>
+
+<p>还需要一个用于展示的网页，在public文件夹下编写search.html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.bootcss.com/jquery/3.4.1/jquery.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span> 标题：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title_text&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-submit&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;查询&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin: 10px 0px&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100%&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;record2&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><br><span class="javascript">         $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">            $(<span class="hljs-string">&quot;input:button&quot;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">                $.get(<span class="hljs-string">&#x27;/process_get?title=&#x27;</span> + $(<span class="hljs-string">&quot;input:text&quot;</span>).val(), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;</span><br><span class="javascript">                    $(<span class="hljs-string">&quot;#record2&quot;</span>).empty();</span><br><span class="handlebars"><span class="xml">                    $(&quot;#record2&quot;).append(&#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>url<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>source_name<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>&#x27; +</span></span><br><span class="handlebars"><span class="xml">                        &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>title<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>author<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>publish_date<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>&#x27;);</span></span><br><span class="javascript">                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> list <span class="hljs-keyword">of</span> data) &#123;</span><br><span class="handlebars"><span class="xml">                        let table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br><span class="javascript">                        <span class="hljs-built_in">Object</span>.values(list).forEach(<span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> &#123;</span><br><span class="handlebars"><span class="xml">                            table += (element + &#x27;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;);</span></span><br>                        &#125;);<br><span class="javascript">                        $(<span class="hljs-string">&quot;#record2&quot;</span>).append(table + <span class="hljs-string">&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;</span>);</span><br>                    &#125;<br>                &#125;);<br>            &#125;);<br><br>        &#125;);<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>最后在search_site文件夹下运行如下命令开启本地服务器</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">node bin/www<br></code></pre></td></tr></table></figure>
+
+<p>访问</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs web-idl">http:&#x2F;&#x2F;localhost:3000&#x2F;search.html<br></code></pre></td></tr></table></figure>
+
+<p>可以看到查询的页面如下</p>
+<p><img src="https://i.loli.net/2021/04/30/bh6ytsJwSNLzcDx.png" alt="Snipaste_2021-04-30_10-52-02.png"></p>
+<p>在输入框中输入想要查询的标题，下面就会以表格的形式进行展示</p>
+<p><img src="https://i.loli.net/2021/04/30/y95EY6h7XIDdBaG.png" alt="Snipaste_2021-04-30_10-53-57.png"></p>
+<p>继续在路由中添加一个可以统计搜索文章的时间热度，即某天包含某关键词的文章发表了多少篇。</p>
+<p>继续修改routes/index.js文件，修改后如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">var</span> router = express.Router();<br><span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../mysql.js&#x27;</span>);<br><br><span class="hljs-comment">/* GET home page. */</span><br>router.get(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>&#123;<br>    res.render(<span class="hljs-string">&#x27;index&#x27;</span>, &#123; <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Express&#x27;</span> &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 新添加了一个路由，用做查询数据库并返回查询结果</span><br>router.get(<span class="hljs-string">&#x27;/process_get&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-comment">//sql字符串和参数</span><br>    <span class="hljs-keyword">var</span> fetchSql = <span class="hljs-string">&quot;select url,source_name,title,author,publish_date &quot;</span> +<br>        <span class="hljs-string">&quot;from fetches where title like &#x27;%&quot;</span> + request.query.title + <span class="hljs-string">&quot;%&#x27;&quot;</span>;<br>    mysql.query(fetchSql, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>        response.writeHead(<span class="hljs-number">200</span>, &#123;<br>            <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span><br>        &#125;);<br>        response.write(<span class="hljs-built_in">JSON</span>.stringify(result));<br>        response.end();<br>    &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 搜索发表时间并且按照时间聚类，统计数量</span><br>router.get(<span class="hljs-string">&#x27;/time_get&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-keyword">var</span> fetchSql = <span class="hljs-string">&quot;SELECT publish_date, COUNT(title) FROM fetches WHERE title LIKE &#x27;%&quot;</span>+ <br>    request.query.title +<span class="hljs-string">&quot;%&#x27; GROUP BY publish_date;&quot;</span>;<br>    mysql.query(fetchSql, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>        response.writeHead(<span class="hljs-number">200</span>, &#123;<br>            <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span><br>        &#125;);<br>        response.write(<span class="hljs-built_in">JSON</span>.stringify(result));<br>        response.end();<br>    &#125;);<br>&#125;);<br><br><span class="hljs-built_in">module</span>.exports = router;<br></code></pre></td></tr></table></figure>
+
+<p>相应的，为了展示搜索结果，我们也需要修改public/search.html，修改后如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.bootcss.com/jquery/3.4.1/jquery.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span> 标题：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title_text&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-submit&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;查询&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin: 10px 0px&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100%&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;record1&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><br><span class="javascript">        $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">            $(<span class="hljs-string">&quot;input:button&quot;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">                $.get(<span class="hljs-string">&#x27;/time_get?title=&#x27;</span> + $(<span class="hljs-string">&quot;input:text&quot;</span>).val(), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;</span><br><span class="javascript">                    $(<span class="hljs-string">&quot;#record1&quot;</span>).empty();</span><br><span class="handlebars"><span class="xml">                    $(&quot;#record1&quot;).append(&#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>publish_date<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>count<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>&#x27;);</span></span><br><span class="javascript">                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> list <span class="hljs-keyword">of</span> data) &#123;</span><br><span class="javascript">                        <span class="hljs-keyword">let</span> regExp = <span class="hljs-regexp">/((\d&#123;4&#125;|\d&#123;2&#125;)(\-|\/|\.)\d&#123;1,2&#125;\3\d&#123;1,2&#125;)/</span>;</span><br><span class="handlebars"><span class="xml">                        let table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br><span class="javascript">                        <span class="hljs-built_in">Object</span>.values(list).forEach(<span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> &#123;</span><br>                            if (regExp.test(element)) element = regExp.exec(element)[0];<br><span class="handlebars"><span class="xml">                            table += (element + &#x27;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;);</span></span><br>                        &#125;);<br><span class="javascript">                        $(<span class="hljs-string">&quot;#record1&quot;</span>).append(table + <span class="hljs-string">&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;</span>);</span><br>                    &#125;<br>                &#125;);<br>            &#125;);<br><br>        &#125;);<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin: 10px 0px&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100%&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;record2&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><br><span class="javascript">         $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">            $(<span class="hljs-string">&quot;input:button&quot;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">                $.get(<span class="hljs-string">&#x27;/process_get?title=&#x27;</span> + $(<span class="hljs-string">&quot;input:text&quot;</span>).val(), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;</span><br><span class="javascript">                    $(<span class="hljs-string">&quot;#record2&quot;</span>).empty();</span><br><span class="handlebars"><span class="xml">                    $(&quot;#record2&quot;).append(&#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>url<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>source_name<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>&#x27; +</span></span><br><span class="handlebars"><span class="xml">                        &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>title<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>author<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>publish_date<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>&#x27;);</span></span><br><span class="javascript">                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> list <span class="hljs-keyword">of</span> data) &#123;</span><br><span class="javascript">                        <span class="hljs-keyword">let</span> regExp = <span class="hljs-regexp">/((\d&#123;4&#125;|\d&#123;2&#125;)(\-|\/|\.)\d&#123;1,2&#125;\3\d&#123;1,2&#125;)/</span>;</span><br><span class="handlebars"><span class="xml">                        let table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cardLayout&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br><span class="javascript">                        <span class="hljs-built_in">Object</span>.values(list).forEach(<span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> &#123;</span><br>                            if (regExp.test(element)) element = regExp.exec(element)[0];<br><span class="handlebars"><span class="xml">                            table += (element + &#x27;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;);</span></span><br>                        &#125;);<br><span class="javascript">                        $(<span class="hljs-string">&quot;#record2&quot;</span>).append(table + <span class="hljs-string">&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;</span>);</span><br>                    &#125;<br>                &#125;);<br>            &#125;);<br><br>        &#125;);<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中新添加了一个表格，用于展示时间热度。</p>
+<p>最后按照上面的流程访问更新后的网站，查询效果如下</p>
+<p><img src="https://i.loli.net/2021/04/30/6YdOQsGDbPXeVhy.png" alt="Snipaste_2021-04-30_11-02-35.png"></p>
+<p>基本功能已经实现，下面是对展示效果进行优化，在search.html中加入css</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">&lt;style&gt;<br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=text]</span>, select &#123;<br>      <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>      <span class="hljs-attribute">padding</span>: <span class="hljs-number">12px</span> <span class="hljs-number">20px</span>;<br>      <span class="hljs-attribute">margin</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0</span>;<br>      <span class="hljs-attribute">display</span>: inline-block;<br>      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#ccc</span>;<br>      <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;<br>      <span class="hljs-attribute">box-sizing</span>: border-box;<br>    &#125;<br>    <br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=button]</span> &#123;<br>      <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#98bf21</span>;<br>      <span class="hljs-attribute">color</span>: white;<br>      <span class="hljs-attribute">padding</span>: <span class="hljs-number">14px</span> <span class="hljs-number">20px</span>;<br>      <span class="hljs-attribute">margin</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0</span>;<br>      <span class="hljs-attribute">border</span>: none;<br>      <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;<br>      <span class="hljs-attribute">cursor</span>: pointer;<br>    &#125;<br>    <br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=button]</span><span class="hljs-selector-pseudo">:hover</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#98bf21</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span><br>    &#123;<br>        <span class="hljs-attribute">width</span>:<span class="hljs-number">100%</span>;<br>        <span class="hljs-attribute">border-collapse</span>:collapse;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">td</span>, <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1em</span>;<br>        <span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#98bf21</span>;<br>        <span class="hljs-attribute">padding</span>:<span class="hljs-number">3px</span> <span class="hljs-number">7px</span> <span class="hljs-number">2px</span> <span class="hljs-number">7px</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1.1em</span>;<br>        <span class="hljs-attribute">text-align</span><span class="hljs-selector-pseudo">:left</span>;<br>        <span class="hljs-attribute">padding-top</span>:<span class="hljs-number">5px</span>;<br>        <span class="hljs-attribute">padding-bottom</span>:<span class="hljs-number">4px</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#A7C942</span>;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#ffffff</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">tr</span><span class="hljs-selector-class">.alt</span> <span class="hljs-selector-tag">td</span> <br>    &#123;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#000000</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#EAF2D3</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span><br>    &#123;<br>        <span class="hljs-attribute">width</span>:<span class="hljs-number">100%</span>;<br>        <span class="hljs-attribute">border-collapse</span>:collapse;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">td</span>, <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1em</span>;<br>        <span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#98bf21</span>;<br>        <span class="hljs-attribute">padding</span>:<span class="hljs-number">3px</span> <span class="hljs-number">7px</span> <span class="hljs-number">2px</span> <span class="hljs-number">7px</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1.1em</span>;<br>        <span class="hljs-attribute">text-align</span><span class="hljs-selector-pseudo">:left</span>;<br>        <span class="hljs-attribute">padding-top</span>:<span class="hljs-number">5px</span>;<br>        <span class="hljs-attribute">padding-bottom</span>:<span class="hljs-number">4px</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#A7C942</span>;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#ffffff</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">tr</span><span class="hljs-selector-class">.alt</span> <span class="hljs-selector-tag">td</span> <br>    &#123;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#000000</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#EAF2D3</span>;<br>    &#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<p>对按钮（button）和表格进行了修饰</p>
+<p>同时修改了表格后面会多一列的问题</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><br><span class="javascript">    $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">        $(<span class="hljs-string">&quot;input:button&quot;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">            $.get(<span class="hljs-string">&#x27;/time_get?title=&#x27;</span> + $(<span class="hljs-string">&quot;input:text&quot;</span>).val(), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;</span><br><span class="javascript">                $(<span class="hljs-string">&quot;#record1&quot;</span>).empty();</span><br><span class="handlebars"><span class="xml">                $(&quot;#record1&quot;).append(&#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>发布时间<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>数量<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>&#x27;);</span></span><br><span class="javascript">                <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;</span><br><span class="javascript">                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> list <span class="hljs-keyword">of</span> data) &#123;</span><br><span class="javascript">                    <span class="hljs-keyword">let</span> regExp = <span class="hljs-regexp">/((\d&#123;4&#125;|\d&#123;2&#125;)(\-|\/|\.)\d&#123;1,2&#125;\3\d&#123;1,2&#125;)/</span>;</span><br><span class="handlebars"><span class="xml">                    let table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alt&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br>                    if (i % 2 == 0) &#123;<br><span class="handlebars"><span class="xml">                        table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br>                    &#125;<br><span class="javascript">                    <span class="hljs-built_in">Object</span>.values(list).forEach(<span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> &#123;</span><br>                        if (regExp.test(element)) element = regExp.exec(element)[0];<br><span class="handlebars"><span class="xml">                        table += (element + &#x27;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;);</span></span><br>                    &#125;);<br><span class="javascript">                    <span class="hljs-keyword">let</span> out_table = table.substring(<span class="hljs-number">0</span>, table.length - <span class="hljs-number">4</span>) <span class="hljs-comment">// 这里减去多于的&lt;td&gt;</span></span><br><span class="javascript">                    $(<span class="hljs-string">&quot;#record1&quot;</span>).append(out_table + <span class="hljs-string">&#x27;&lt;/tr&gt;&#x27;</span>);</span><br>                    i++;<br>                &#125;<br>            &#125;);<br>        &#125;);<br><br>    &#125;);<br><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>最后效果如下</p>
+<p><img src="https://i.loli.net/2021/04/30/JQO8NBHaDU473ZV.png" alt="Snipaste_2021-04-30_13-29-45.png"></p>
+<p>完整代码参见<a target="_blank" rel="noopener" href="https://github.com/Sidney233/Node.js_crawler">Sidney233/Node.js_crawler: 使用Node.js爬取新闻网页并实现一个简单的网页用于查询爬取数据 (github.com)</a></p>
+
+      </section>
+
+      <section class="article-footer">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">#Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">#前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">#后端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">#数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">#爬虫</a></li></ul>
+      </section>
+
+      <section class="article-navs">
+        
+<nav class="card-container card-article-nav">
+  <div class="card-list">
+    
+    
+      <div id="article-nav-older" class="card-item img">
+        <article>
+          
+            <div class="card-cover" style="background-image: url(https://i.loli.net/2021/04/28/yCcUnPkvuL6B5eJ.jpg)"></div>
+          
+          <a class="card-link article-nav-link" href="/2021/04/28/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/"></a>
+          <strong class="article-nav-caption">Older</strong>
+          <p class="article-nav-title">
+            
+              第一篇博客
+            
+          </p>
+        </article>
+      </div>
+    
+  </div>
+</nav>
+
+      </section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+     
+    <p>&copy; 2021 <a href="/" target="_blank">Sidney</a></p>
+
+    
+      <p id="hitokoto"></p>
+      <script src="https://v1.hitokoto.cn/?c=a&amp;encode=js&select=%23hitokoto" defer></script>
+    
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+    
+    <!--
+    <div class="footer-container__texts">
+      <p>ヽ｀、ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
+      <p>｀、ヽ｀｀、ヽ、｀｀｀、｀、ヽ🌙｀｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀｀、｀ヽ、｀</p>
+      <p>｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、、、ヽヽ、｀｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
+      <p>ヽ｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀、、ヽヽ、｀Time waits for on one 🍓｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
+      <p>｀ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ｀ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
+    </div>
+    -->
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+  <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+  <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+</svg> 
+  </div>
+
+  
+  
+
+
+  <!-- aplayer 音频 start -->
+  <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
+  <script type="text/javascript" src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
+  <script type="text/javascript">
+    const aplayer = document.querySelectorAll(".aplayer");
+    aplayer && initaplayer(aplayer);
+    function initaplayer(els) {
+      let elsArr = Array.from(els);
+      elsArr.forEach(el => {
+        let params = {
+          container: el,
+          audio: { ...el.dataset },
+          theme: "#b7daff",
+          autoplay: false,
+          loop: false,
+          mutex: true,
+        }
+        if (el.dataset.lrc) {
+          params['lrcType'] = 3
+        }
+        new APlayer(params);
+      });
+    }
+  </script>
+  <!-- aplayer 音频 end -->
+  
+
+<!-- dplayer 视频 start -->
+<script type="text/javascript" src="https://unpkg.com/dplayer@1.25.1/dist/DPlayer.min.js"></script>
+<script type="text/javascript">
+  const dplayer = document.querySelectorAll(".dplayer");
+  dplayer && initDPlayer(dplayer);
+  function initDPlayer(els) {
+    let elsArr = Array.from(els);
+    elsArr.forEach(el => {
+      let url = el.dataset.url;
+      let cover = el.dataset.cover;
+      let subtitle = el.dataset.subtitle;
+
+      let options = {
+        container: el,
+        video: { url: url, pic: cover },
+        theme: "#b7daff",
+        autoplay: false,
+        loop: false,
+        mutex: true,
+      }
+
+      if (subtitle) {
+        options.subtitle = {
+          url: el.dataset.subtitle,
+        }
+      }
+      new DPlayer(options);
+    });
+  }
+</script>
+<!-- dplayer 视频 end -->
+
+
+<!-- waterfall 瀑布流 start -->
+
+<script src="/lib/waterfall.min.js"></script>
+
+<script type="text/javascript">
+
+const waterfalls = document.querySelectorAll(".waterfall-container");
+
+if (waterfalls && waterfalls.length > 0) {
+  waterfalls.forEach((waterfall, index) => {
+    let cls = "waterfall-container-" + index;
+    waterfall.classList.add(cls);
+    initWaterfall(cls, waterfall);
+  });
+}
+
+function initWaterfall(selector, el) {
+  const options = {};
+  if (Object.keys(el.dataset).length > 0) {
+    for (let k in el.dataset) {
+      options[k] = el.dataset[k];
+    }
+  }
+  waterfall(`.${selector}`, options);
+}
+</script>
+<!-- waterfall 瀑布流 end -->
+
+
+  <!-- zoom start -->
+  
+<script src="/lib/zoom.min.js"></script>
+
+  <script type="text/javascript">
+    document.querySelector(".article-content") && zoom(".article-content");
+  </script>
+  <!-- zoom end -->
+  
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>
