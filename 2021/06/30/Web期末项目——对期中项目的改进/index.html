@@ -1,158 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="zh">
+
 <head>
+  
+  <title>Web期末项目——对期中项目的改进 - Sidney的博客</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#3367D6"/>
-  <link rel="apple-touch-icon" href="/icons-192.png">
-  <link rel="manifest" href="/manifest.json">
-
+  <meta name="description" content="博客网站搭建中~">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
   
-    <meta name="description" content="博客网站搭建中~">
   
 
+  <link rel="shortcut icon" href="/favicon.ico" type="image/png" />
+  <meta name="description" content="对老师给的代码进行了修改">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web期末项目——对期中项目的改进">
+<meta property="og:url" content="https://sidney233.github.io/2021/06/30/Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B/index.html">
+<meta property="og:site_name" content="Sidney的博客">
+<meta property="og:description" content="对老师给的代码进行了修改">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/FuJUDqICy3oxvHO.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/dRaHg41wXJF68hG.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/klbaoU6RJC9fMKZ.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/XLTy247FRvJSWGA.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/NyrSdRK32bkJIsH.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/mctJldZ3NrzvXak.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/GLSwUsChtx8NPFT.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/gYp6bN9JDnEh7PG.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/4hxQ6bNu2tKLkyR.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/DmSOViTLjZlnNEP.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/C6WIUpamLEc2Pdw.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/30/phSqR6Y4L2mBWOQ.png">
+<meta property="article:published_time" content="2021-06-30T07:27:01.000Z">
+<meta property="article:modified_time" content="2021-07-08T03:16:36.653Z">
+<meta property="article:author" content="Sidney">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="后端">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Express">
+<meta property="article:tag" content="Angular">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/06/30/FuJUDqICy3oxvHO.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/hexo-theme-nexmoe@latest/source/lib/mdui_043tiny/css/mdui.css,npm/hexo-theme-nexmoe@latest/source/lib/iconfont/iconfont.css?v=233" crossorigin>
+  <link rel="stylesheet" href="/css/style.css?v=1625751749376">
   
-
-  
-    <meta name="author" content="Sidney">
-  
-
-  
-
-  
-
-  <title>Web期末项目——对期中项目的改进 | Sidney</title>
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@1.1.3/index.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs@9.16.2/styles/monokai.css">
-  
-
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1625751749376">
 <meta name="generator" content="Hexo 5.4.0"></head>
-<body>
-  <div class="root-container">
-    <!-- navbar -->
-<nav class="navbar">
-  <div class="navbar-content">
-    <!-- logo -->
-    <div class="navbar-logo">
-      <a href="/">
-        
-          Sidney
-        
-      </a>
-    </div>
-    <!-- link -->
-    <div class="navbar-link">
-      <div class="navbar-btn">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <ul class="navbar-list">
-        
-          <li class="navbar-list-item"><a href="/">HOME</a></li>
-        
-      </ul>
+
+<body class="mdui-drawer-body-left">
+  
+  <div id="nexmoe-background">
+    <div class="nexmoe-bg" style="background-image: url(https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+    <div class="mdui-appbar mdui-shadow-0">
+      <div class="mdui-toolbar">
+        <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+        <a href="/" title="Sidney" class="mdui-btn mdui-btn-icon"><img src="https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/avatar.png" alt="Sidney"></a>
+       </div>
     </div>
   </div>
-</nav>
+  <div id="nexmoe-header">
+      <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Sidney">
+            <img src="https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/avatar.png" alt="Sidney" alt="Sidney">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>2</div>
+        <div><span>Tags</span>7</div>
+        <div><span>Categories</span>1</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+            <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+        </form>
+    </div>
+</div>
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://jq.qq.com/?_wv=1027&k=5CfKHun" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/20238211" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/nexmoe/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Web编程/">Web编程</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Express/" style="font-size: 20px;">Express</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 20px;">前端</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 20px;">后端</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 20px;">数据库</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a>
+    </div>
+    
+  </div>
+
+  
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2021 Sidney
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+  </div>
+  <div id="nexmoe-content">
+    <div class="nexmoe-primary">
+        <div class="nexmoe-post">
+
+  <article>
+    
+        <div class="nexmoe-post-cover" style="padding-bottom: NaN%;"> 
+            <img data-src="https://i.loli.net/2021/06/30/ADOs5BCd8mFglVr.jpg" data-sizes="auto" alt="Web期末项目——对期中项目的改进" class="lazyload">
+            <h1>Web期末项目——对期中项目的改进</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年06月30日</a>
+    <a><i class="nexmoefont icon-areachart"></i>2.6k 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 14 分钟</a>
+</div>
 
     
-<!-- header container -->
-<header class="header-container post">
 
-  
-  
+    <p>对老师给的代码进行了修改</p>
+<span id="more"></span>
 
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-    <div class="header-content">
-      
-        <div class="post-image" style="background-image: url(https://i.loli.net/2021/06/30/ADOs5BCd8mFglVr.jpg)"></div>
-      
-
-      <div class="post-text">
-        <div class="type-wrap">
-          <a class="article-category-link" href="/categories/Web%E7%BC%96%E7%A8%8B/">Web编程</a>
-        </div>
-        <h1 class="title-wrap">Web期末项目——对期中项目的改进</h1>
-        <h2 class="title-sub-wrap">
-          <strong>Sidney</strong>
-          <span>发布于</span>
-          
-  <a href="javascript:;" class="article-date">
-    <time datetime="2021-06-30T07:27:01.000Z" itemprop="datePublished">2021-06-30</time>
-  </a>
-
-        </h2>
-      </div>
-    </div>
-  
-
-  
-  
-  
-</header>
-
-    <!-- 文章 -->
-
-<!-- 文章内容 -->
-
-<div class="body-container">
-  <article class="content-container article-container">
-    <div class="article-content">
-      
-      
-
-      <section class="article-entry">
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本次作业是对期中搭的简易网站的改进与丰富，具体添加的功能会在下面展示。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本次作业是对期中搭的简易网站的改进与丰富，具体添加的功能会在下面展示。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在正式开始之前，先在我们之前的crawl数据库中建立用户信息表和用户操作记录表，SQL语句如下</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--创建用户信息数据表</span><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `crawl`.`<span class="hljs-keyword">user</span>` (<br>  `id` <span class="hljs-type">INT</span> UNSIGNED <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,<br>  `username` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">45</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `password` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">45</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `registertime` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-built_in">CURRENT_TIMESTAMP</span>,<br>  `valid` <span class="hljs-type">BOOLEAN</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  <span class="hljs-keyword">PRIMARY</span> KEY (`id`),<br>  <span class="hljs-keyword">UNIQUE</span> KEY `username_UNIQUE` (`username`))<br>ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8;<br><br><br><span class="hljs-comment">--记录用户的登陆，查询（具体查询语句）操作</span><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `crawl`.`user_action` (<br>  `id` <span class="hljs-type">INT</span> UNSIGNED <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,<br>  `username` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">45</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `request_time` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">45</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `request_method` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `request_url` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">300</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>  `status` <span class="hljs-type">int</span>(<span class="hljs-number">4</span>),<br>  `remote_addr` <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    <span class="hljs-keyword">PRIMARY</span> KEY (`id`))<br>ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8;<br></code></pre></td></tr></table></figure>
 
 <p>其中valid字段说明该用户是否可用，因为我们添加了停用用户账号功能。</p>
-<h2 id="登录、注册界面"><a href="#登录、注册界面" class="headerlink" title="登录、注册界面"></a>登录、注册界面</h2><p><img src="https://i.loli.net/2021/06/30/FuJUDqICy3oxvHO.png" alt="Snipaste_2021-06-30_15-48-45.png"></p>
-<p><img src="https://i.loli.net/2021/06/30/dRaHg41wXJF68hG.png" alt="Snipaste_2021-06-30_15-49-16.png"> </p>
+<h2 id="登录、注册界面"><a href="#登录、注册界面" class="headerlink" title="登录、注册界面"></a>登录、注册界面</h2><p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/FuJUDqICy3oxvHO.png" alt="Snipaste_2021-06-30_15-48-45.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/dRaHg41wXJF68hG.png" alt="Snipaste_2021-06-30_15-49-16.png" class="lazyload"> </p>
 <p>可以通过导航栏的Login按钮与Register按钮进行切换，实现代码如下</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>    $(<span class="hljs-string">&#x27;#login-form-link&#x27;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>&#123;<br>        $(<span class="hljs-string">&quot;#login-form&quot;</span>).delay(<span class="hljs-number">100</span>).fadeIn(<span class="hljs-number">100</span>);<br>        $(<span class="hljs-string">&quot;#register-form&quot;</span>).fadeOut(<span class="hljs-number">100</span>);<br>        $(<span class="hljs-string">&#x27;#register-form-link&#x27;</span>).removeClass(<span class="hljs-string">&#x27;active&#x27;</span>);<br>        $(<span class="hljs-built_in">this</span>).addClass(<span class="hljs-string">&#x27;active&#x27;</span>);<br>        e.preventDefault();<br>    &#125;);<br>    $(<span class="hljs-string">&#x27;#register-form-link&#x27;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>&#123;<br>        $(<span class="hljs-string">&quot;#register-form&quot;</span>).delay(<span class="hljs-number">100</span>).fadeIn(<span class="hljs-number">100</span>);<br>        $(<span class="hljs-string">&quot;#login-form&quot;</span>).fadeOut(<span class="hljs-number">100</span>);<br>        $(<span class="hljs-string">&#x27;#login-form-link&#x27;</span>).removeClass(<span class="hljs-string">&#x27;active&#x27;</span>);<br>        $(<span class="hljs-built_in">this</span>).addClass(<span class="hljs-string">&#x27;active&#x27;</span>);<br>        e.preventDefault();<br>    &#125;);<br><br>&#125;);<br></code></pre></td></tr></table></figure>
 
 <p>对html中的标签进行操作，从而做到了不需要切换网页就实现登录和注册两个表单。</p>
 <p>用户的操作记录会被打印在终端并保存在数据库中</p>
-<p><img src="https://i.loli.net/2021/06/30/klbaoU6RJC9fMKZ.png" alt="Snipaste_2021-06-30_16-04-10.png"></p>
-<p><img src="https://i.loli.net/2021/06/30/XLTy247FRvJSWGA.png" alt="Snipaste_2021-06-30_16-04-20.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/klbaoU6RJC9fMKZ.png" alt="Snipaste_2021-06-30_16-04-10.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/XLTy247FRvJSWGA.png" alt="Snipaste_2021-06-30_16-04-20.png" class="lazyload"></p>
 <p>这里使用的express的中间件来实现</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">app.use(logger(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">tokens, req, res</span>) </span>&#123;<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;打印的日志信息：&#x27;</span>);<br>  <span class="hljs-keyword">var</span> request_time = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();<br>  <span class="hljs-keyword">var</span> request_method = tokens.method(req, res);<br>  <span class="hljs-keyword">var</span> request_url = tokens.url(req, res);<br>  <span class="hljs-keyword">var</span> status = tokens.status(req, res);<br>  <span class="hljs-keyword">var</span> remote_addr = tokens[<span class="hljs-string">&#x27;remote-addr&#x27;</span>](req, res);<br>  <span class="hljs-keyword">if</span>(req.session)&#123;<br>    <span class="hljs-keyword">var</span> username = req.session[<span class="hljs-string">&#x27;username&#x27;</span>]||<span class="hljs-string">&#x27;notlogin&#x27;</span>;<br>  &#125;<span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">var</span> username = <span class="hljs-string">&#x27;notlogin&#x27;</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 直接将用户操作记入mysql中</span><br>  <span class="hljs-keyword">if</span>(username!=<span class="hljs-string">&#x27;notlogin&#x27;</span>)&#123;<br>    logDAO.userlog([username,request_time,request_method,request_url,status,remote_addr], <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">success</span>) </span>&#123;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;成功保存！&#x27;</span>);<br>    &#125;)<br>  &#125;<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;请求时间  = &#x27;</span>, request_time);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;请求方式  = &#x27;</span>, request_method);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;请求链接  = &#x27;</span>, request_url);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;请求状态  = &#x27;</span>, status);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;请求长度  = &#x27;</span>, tokens.res(req, res, <span class="hljs-string">&#x27;content-length&#x27;</span>),);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;响应时间  = &#x27;</span>, tokens[<span class="hljs-string">&#x27;response-time&#x27;</span>](req, res) + <span class="hljs-string">&#x27;ms&#x27;</span>);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;远程地址  = &#x27;</span>, remote_addr);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;远程用户  = &#x27;</span>, tokens[<span class="hljs-string">&#x27;remote-user&#x27;</span>](req, res));<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;http版本  = &#x27;</span>, tokens[<span class="hljs-string">&#x27;http-version&#x27;</span>](req, res));<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;浏览器信息 = &#x27;</span>, tokens[<span class="hljs-string">&#x27;user-agent&#x27;</span>](req, res));<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;用户 = &#x27;</span>, username);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27; ===============&#x27;</span>,method);<br><br>&#125;, ));<br></code></pre></td></tr></table></figure>
 
 <h2 id="查看数据"><a href="#查看数据" class="headerlink" title="查看数据"></a>查看数据</h2><p>注册登录后，可以进入网站查看爬取到的新闻，并且可以按照时间升序降序展示</p>
-<p><img src="https://i.loli.net/2021/06/30/NyrSdRK32bkJIsH.png" alt="Snipaste_2021-06-30_16-06-58.png"></p>
-<p><img src="https://i.loli.net/2021/06/30/mctJldZ3NrzvXak.png" alt="Snipaste_2021-06-30_16-07-29.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/NyrSdRK32bkJIsH.png" alt="Snipaste_2021-06-30_16-06-58.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/mctJldZ3NrzvXak.png" alt="Snipaste_2021-06-30_16-07-29.png" class="lazyload"></p>
 <p>代码如下</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">router.get(<span class="hljs-string">&#x27;/search&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-built_in">console</span>.log(request.session[<span class="hljs-string">&#x27;username&#x27;</span>]);<br>    <span class="hljs-comment">//sql字符串和参数</span><br>    <span class="hljs-keyword">if</span> (request.session[<span class="hljs-string">&#x27;username&#x27;</span>]===<span class="hljs-literal">undefined</span>) &#123;<br>        <span class="hljs-comment">// response.redirect(&#x27;/index.html&#x27;)</span><br>        response.json(&#123;<span class="hljs-attr">message</span>:<span class="hljs-string">&#x27;url&#x27;</span>,<span class="hljs-attr">result</span>:<span class="hljs-string">&#x27;/index.html&#x27;</span>&#125;);<br>    &#125;<span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">var</span> param = request.query;<br>        newsDAO.search(param,<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>            response.json(&#123;<span class="hljs-attr">message</span>:<span class="hljs-string">&#x27;data&#x27;</span>,<span class="hljs-attr">result</span>:result&#125;);<br>        &#125;)<br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"> <span class="hljs-comment">// 分页</span><br> $scope.initPageSort=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">item</span>)</span>&#123;<br>     $scope.data = item;<br>     $scope.pageSize=<span class="hljs-number">8</span>;　　<span class="hljs-comment">//每页显示的数据量，可以随意更改</span><br>     $scope.selPage = <span class="hljs-number">1</span>;<br>     $scope.pages = <span class="hljs-built_in">Math</span>.ceil($scope.data.length / $scope.pageSize); <span class="hljs-comment">//分页数</span><br>     $scope.pageList = [];<span class="hljs-comment">//最多显示5页，后面6页之后不会全部列出页码来</span><br>     $scope.index = <span class="hljs-number">1</span>;<br>     <span class="hljs-comment">// var page = 1;</span><br>     <span class="hljs-comment">// for (var i = page; i &lt; $scope.pages+1 &amp;&amp; i &lt; page+5; i++) &#123;</span><br>     <span class="hljs-comment">//     $scope.pageList.push(i);</span><br>     <span class="hljs-comment">// &#125;</span><br>     <span class="hljs-keyword">var</span> len = $scope.pages&gt; <span class="hljs-number">5</span> ? <span class="hljs-number">5</span>:$scope.pages;<br>     $scope.pageList = <span class="hljs-built_in">Array</span>.from(&#123;<span class="hljs-attr">length</span>: len&#125;, <span class="hljs-function">(<span class="hljs-params">x,i</span>) =&gt;</span> i+<span class="hljs-number">1</span>);<br><br>     <span class="hljs-comment">//设置表格数据源(分页)</span><br>     $scope.items = $scope.data.slice(<span class="hljs-number">0</span>, $scope.pageSize);<br><br> &#125;;<br>$scope.selectPage = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">page</span>) </span>&#123;<br>     <span class="hljs-comment">//不能小于1大于最大（第一页不会有前一页，最后一页不会有后一页）</span><br>     <span class="hljs-keyword">if</span> (page &lt; <span class="hljs-number">1</span> || page &gt; $scope.pages) <span class="hljs-keyword">return</span>;<br>     <span class="hljs-comment">//最多显示分页数5，开始分页转换</span><br>     <span class="hljs-keyword">var</span> pageList = [];<br>     <span class="hljs-keyword">if</span>(page&gt;<span class="hljs-number">2</span>)&#123;<br>         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = page-<span class="hljs-number">2</span>; i &lt;= $scope.pages &amp;&amp; i &lt; page+<span class="hljs-number">3</span>; i++) &#123;<br>             pageList.push(i);<br>         &#125;<br>     &#125;<span class="hljs-keyword">else</span> &#123;<br>         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = page; i &lt;= $scope.pages &amp;&amp; i &lt; page+<span class="hljs-number">5</span>; i++) &#123;<br>             pageList.push(i);<br>         &#125;<br>     &#125;<br><br>     $scope.index =(page-<span class="hljs-number">1</span>)*$scope.pageSize+<span class="hljs-number">1</span>;<br>     $scope.pageList = pageList;<br>     $scope.selPage = page;<br>     $scope.items = $scope.data.slice(($scope.pageSize * (page - <span class="hljs-number">1</span>)), (page * $scope.pageSize));<span class="hljs-comment">//通过当前页数筛选出表格当前显示数据</span><br>     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;选择的页：&quot;</span> + page);<br> &#125;;<br></code></pre></td></tr></table></figure>
 
 <p>在图片方面，可以查看新闻发布时间的柱状图，某个关键词在新闻中出现频率的折线图和发布单位的状图，还使用中文分词构造了一个词云用于展示</p>
-<p><img src="https://i.loli.net/2021/06/30/GLSwUsChtx8NPFT.png" alt="Snipaste_2021-06-30_16-14-14.png"><br><img src="https://i.loli.net/2021/06/30/gYp6bN9JDnEh7PG.png" alt="Snipaste_2021-06-30_16-14-59.png"><br><img src="https://i.loli.net/2021/06/30/4hxQ6bNu2tKLkyR.png" alt="Snipaste_2021-06-30_16-14-40.png"></p>
-<p><img src="https://i.loli.net/2021/06/30/DmSOViTLjZlnNEP.png" alt="Snipaste_2021-06-30_16-14-30.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/GLSwUsChtx8NPFT.png" alt="Snipaste_2021-06-30_16-14-14.png" class="lazyload"><br><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/gYp6bN9JDnEh7PG.png" alt="Snipaste_2021-06-30_16-14-59.png" class="lazyload"><br><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/4hxQ6bNu2tKLkyR.png" alt="Snipaste_2021-06-30_16-14-40.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/DmSOViTLjZlnNEP.png" alt="Snipaste_2021-06-30_16-14-30.png" class="lazyload"></p>
 <p>最后这个饼图由于爬取数据的原因，所以展示得有点问题。</p>
 <p>主要是前端的js代码，实现如下</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 下面是四个图的操作</span><br>$scope.histogram = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;<br>    $scope.searchng = <span class="hljs-literal">false</span>;<br>    $scope.displayng = <span class="hljs-literal">false</span>;<br>    $scope.pictureng = <span class="hljs-literal">true</span>;<br>    $http.get(<span class="hljs-string">&quot;/news/histogram&quot;</span>)<br>        .then(<br>            <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">res</span>) </span>&#123;<br>                <span class="hljs-keyword">if</span>(res.data.message==<span class="hljs-string">&#x27;url&#x27;</span>)&#123;<br>                    <span class="hljs-built_in">window</span>.location.href=res.data.result;<br>                &#125;<span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-comment">// var newdata = washdata(data);</span><br>                    <span class="hljs-keyword">let</span> xdata = [], ydata = [], newdata;<br><br>                    <span class="hljs-keyword">var</span> pattern = <span class="hljs-regexp">/\d&#123;4&#125;-(\d&#123;2&#125;-\d&#123;2&#125;)/</span>;<br>                    res.data.result.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">element</span>) </span>&#123;<br>                        <span class="hljs-comment">// &quot;x&quot;:&quot;2020-04-28T16:00:00.000Z&quot; ,对x进行处理,只取 月日</span><br>                        xdata.push(pattern.exec(element[<span class="hljs-string">&quot;x&quot;</span>])[<span class="hljs-number">1</span>]);<br>                        ydata.push(element[<span class="hljs-string">&quot;y&quot;</span>]);<br>                    &#125;);<br>                    newdata = &#123;<span class="hljs-string">&quot;xdata&quot;</span>: xdata, <span class="hljs-string">&quot;ydata&quot;</span>: ydata&#125;;<br><br>                    <span class="hljs-keyword">var</span> myChart = echarts.init(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;main1&#x27;</span>));<br><br>                    <span class="hljs-comment">// 指定图表的配置项和数据</span><br>                    <span class="hljs-keyword">var</span> option = &#123;<br>                        title: &#123;<br>                            text: <span class="hljs-string">&#x27;新闻发布数 随时间变化&#x27;</span><br>                        &#125;,<br>                        tooltip: &#123;&#125;,<br>                        legend: &#123;<br>                            data: [<span class="hljs-string">&#x27;新闻发布数&#x27;</span>]<br>                        &#125;,<br>                        dataZoom: [<br>                            &#123;<br>                                type: <span class="hljs-string">&#x27;inside&#x27;</span><br>                            &#125;<br>                        ],<br><br>                        xAxis: &#123;<br>                            data: newdata[<span class="hljs-string">&quot;xdata&quot;</span>],<br>                            axisLabel: &#123;<br>                                inside: <span class="hljs-literal">true</span>,<br>                                textStyle: &#123;<br>                                    color: <span class="hljs-string">&#x27;#fff&#x27;</span><br>                                &#125;<br>                            &#125;,<br>                            axisTick: &#123;<br>                                show: <span class="hljs-literal">false</span><br>                            &#125;,<br>                            axisLine: &#123;<br>                                show: <span class="hljs-literal">false</span><br>                            &#125;,<br>                            z: <span class="hljs-number">10</span><br>                        &#125;,<br><br>                        yAxis: &#123;<br>                            axisLine: &#123;<br>                                show: <span class="hljs-literal">false</span><br>                            &#125;,<br>                            axisTick: &#123;<br>                                show: <span class="hljs-literal">false</span><br>                            &#125;,<br>                            axisLabel: &#123;<br>                                textStyle: &#123;<br>                                    color: <span class="hljs-string">&#x27;#999&#x27;</span><br>                                &#125;<br>                            &#125;<br>                        &#125;,<br>                        series: [&#123;<br>                            name: <span class="hljs-string">&#x27;新闻数目&#x27;</span>,<br>                            type: <span class="hljs-string">&#x27;bar&#x27;</span>,<br>                            data: newdata[<span class="hljs-string">&quot;ydata&quot;</span>],<br>                            showBackground: <span class="hljs-literal">true</span>,<br>                            itemStyle: &#123;<br>                                color: <span class="hljs-keyword">new</span> echarts.graphic.LinearGradient(<br>                                    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,<br>                                    [<br>                                        &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#83bff6&#x27;</span>&#125;,<br>                                        &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#188df0&#x27;</span>&#125;,<br>                                        &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#188df0&#x27;</span>&#125;<br>                                    ]<br>                                )<br>                            &#125;,<br>                            emphasis: &#123;<br>                                itemStyle: &#123;<br>                                    color: <span class="hljs-keyword">new</span> echarts.graphic.LinearGradient(<br>                                        <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,<br>                                        [<br>                                            &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#2378f7&#x27;</span>&#125;,<br>                                            &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">0.7</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#2378f7&#x27;</span>&#125;,<br>                                            &#123;<span class="hljs-attr">offset</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#83bff6&#x27;</span>&#125;<br>                                        ]<br>                                    )<br>                                &#125;<br>                            &#125;,<br>                        &#125;]<br>                    &#125;;<br>                    <span class="hljs-comment">// 使用刚指定的配置项和数据显示图表。</span><br>                    myChart.setOption(option);<br>                &#125;<br>            &#125;,<br>            <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>&#123;<br>                $scope.msg = err.data;<br>            &#125;);<br><br>&#125;;<br>$scope.pie = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;<br>    $scope.searchng = <span class="hljs-literal">false</span>;<br>    $scope.displayng = <span class="hljs-literal">false</span>;<br>    $scope.pictureng = <span class="hljs-literal">true</span>;<br>    $http.get(<span class="hljs-string">&quot;/news/pie&quot;</span>).then(<br>        <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">res</span>) </span>&#123;<br>            <span class="hljs-keyword">if</span>(res.data.message==<span class="hljs-string">&#x27;url&#x27;</span>)&#123;<br>                <span class="hljs-built_in">window</span>.location.href=res.data.result;<br>            &#125;<span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">let</span> newdata = [];<br>                <span class="hljs-keyword">let</span> selected = &#123;&#125;;<br>                <span class="hljs-keyword">let</span> i=<span class="hljs-number">0</span>;<br>                res.data.result.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">element</span>) </span>&#123;<br>                    newdata.push(&#123;<span class="hljs-attr">name</span>: element[<span class="hljs-string">&quot;x&quot;</span>], <span class="hljs-attr">value</span>: element[<span class="hljs-string">&quot;y&quot;</span>]&#125;);<br>                    selected[element[<span class="hljs-string">&quot;x&quot;</span>]]=i++<span class="xml">&lt;6;</span><br><br><span class="xml">                &#125;);</span><br><span class="xml">                newdata=newdata.filter(item=&gt;&#123;return item.value!=0&#125;)</span><br><br><span class="xml">                var myChart = echarts.init(document.getElementById(&#x27;main1&#x27;));</span><br><span class="xml">                var app = &#123;&#125;;</span><br><span class="xml">                option = null;</span><br><span class="xml">                // 指定图表的配置项和数据</span><br><span class="xml">                var option = &#123;</span><br><span class="xml">                    title: &#123;</span><br><span class="xml">                        text: &#x27;作者/单位发布新闻数量&#x27;,</span><br><span class="xml">                        x: &#x27;center&#x27;</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    tooltip: &#123;</span><br><span class="xml">                        trigger: &#x27;item&#x27;,</span><br><span class="xml">                        formatter: &quot;&#123;a&#125; <span class="hljs-tag">&lt;<span class="hljs-name">br</span>/&gt;</span>&#123;b&#125; : &#123;c&#125; (&#123;d&#125;%)&quot;</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    legend: &#123;</span><br><span class="xml">                        type:&#x27;scroll&#x27;,</span><br><span class="xml">                        orient: &#x27;vertical&#x27;,</span><br><span class="xml">                        right:10,</span><br><span class="xml">                        top:20,</span><br><span class="xml">                        bottom:20,</span><br><span class="xml">                        selected:selected</span><br><span class="xml">                        // data: [&#x27;直接访问&#x27;, &#x27;邮件营销&#x27;, &#x27;联盟广告&#x27;, &#x27;视频广告&#x27;, &#x27;搜索引擎&#x27;]</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    series: [</span><br><span class="xml">                        &#123;</span><br><span class="xml">                            name: &#x27;访问来源&#x27;,</span><br><span class="xml">                            type: &#x27;pie&#x27;,</span><br><span class="xml">                            radius: [&#x27;40%&#x27;, &#x27;75%&#x27;],</span><br><span class="xml">                            center: [&#x27;50%&#x27;, &#x27;50%&#x27;],</span><br><span class="xml">                            data: newdata,</span><br><span class="xml">                            itemStyle: &#123;</span><br><span class="xml">                                emphasis: &#123;</span><br><span class="xml">                                    shadowBlur: 10,</span><br><span class="xml">                                    shadowOffsetX: 0,</span><br><span class="xml">                                    shadowColor: &#x27;rgba(0, 0, 0, 0.5)&#x27;</span><br><span class="xml">                                &#125;</span><br><span class="xml">                            &#125;</span><br><span class="xml">                        &#125;</span><br><span class="xml">                    ]</span><br><span class="xml">                &#125;;</span><br><span class="xml">                // myChart.setOption(option);</span><br><span class="xml">                app.currentIndex = -1;</span><br><br><span class="xml">                setInterval(function () &#123;</span><br><span class="xml">                    var dataLen = option.series[0].data.length;</span><br><span class="xml">                    // 取消之前高亮的图形</span><br><span class="xml">                    myChart.dispatchAction(&#123;</span><br><span class="xml">                        type: &#x27;downplay&#x27;,</span><br><span class="xml">                        seriesIndex: 0,</span><br><span class="xml">                        dataIndex: app.currentIndex</span><br><span class="xml">                    &#125;);</span><br><span class="xml">                    app.currentIndex = (app.currentIndex + 1) % dataLen;</span><br><span class="xml">                    // 高亮当前图形</span><br><span class="xml">                    myChart.dispatchAction(&#123;</span><br><span class="xml">                        type: &#x27;highlight&#x27;,</span><br><span class="xml">                        seriesIndex: 0,</span><br><span class="xml">                        dataIndex: app.currentIndex</span><br><span class="xml">                    &#125;);</span><br><span class="xml">                    // 显示 tooltip</span><br><span class="xml">                    myChart.dispatchAction(&#123;</span><br><span class="xml">                        type: &#x27;showTip&#x27;,</span><br><span class="xml">                        seriesIndex: 0,</span><br><span class="xml">                        dataIndex: app.currentIndex</span><br><span class="xml">                    &#125;);</span><br><span class="xml">                &#125;, 1000);</span><br><span class="xml">                if (option &amp;&amp; typeof option === &quot;object&quot;) &#123;</span><br><span class="xml">                    myChart.setOption(option, true);</span><br><span class="xml">                &#125;</span><br><span class="xml">                ;</span><br><span class="xml">            &#125;</span><br><span class="xml">        &#125;);</span><br><span class="xml">&#125;;</span><br><span class="xml">$scope.line = function () &#123;</span><br><span class="xml">    $scope.searchng = false;</span><br><span class="xml">    $scope.displayng = false;</span><br><span class="xml">    $scope.pictureng = true;</span><br><span class="xml">    $http.get(&quot;/news/line&quot;).then(</span><br><span class="xml">        function (res) &#123;</span><br><span class="xml">            if(res.data.message==&#x27;url&#x27;)&#123;</span><br><span class="xml">                window.location.href=res.data.result;</span><br><span class="xml">            &#125;else &#123;</span><br><span class="xml">                var myChart = echarts.init(document.getElementById(&quot;main1&quot;));</span><br><span class="xml">                </span><br><span class="xml">                option = &#123;</span><br><span class="xml">                    title: &#123;</span><br><span class="xml">                        text: &#x27;&quot;中国&quot;该词在新闻中的出现次数随时间变化图&#x27;</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    xAxis: &#123;</span><br><span class="xml">                        type: &#x27;category&#x27;,</span><br><span class="xml">                        data: Object.keys(res.data.result)</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    yAxis: &#123;</span><br><span class="xml">                        type: &#x27;value&#x27;</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    series: [&#123;</span><br><span class="xml">                        data: Object.values(res.data.result),</span><br><span class="xml">                        type: &#x27;line&#x27;,</span><br><span class="xml">                        smooth: true,</span><br><span class="xml">                        itemStyle: &#123;normal: &#123;label: &#123;show: true&#125;&#125;&#125;</span><br><span class="xml">                    &#125;],</span><br><br><span class="xml">                &#125;;</span><br><br><span class="xml">                if (option &amp;&amp; typeof option === &quot;object&quot;) &#123;</span><br><span class="xml">                    myChart.setOption(option, true);</span><br><span class="xml">                &#125;</span><br><span class="xml">            &#125;</span><br><br><span class="xml">        &#125;);</span><br><span class="xml">&#125;;</span><br><span class="xml">$scope.wordcloud = function () &#123;</span><br><span class="xml">    $scope.searchng = false;</span><br><span class="xml">    $scope.displayng = false;</span><br><span class="xml">    $scope.pictureng = true;</span><br><span class="xml">    $http.get(&quot;/news/wordcloud&quot;).then(</span><br><span class="xml">        function (res) &#123;</span><br><span class="xml">            if(res.data.message==&#x27;url&#x27;)&#123;</span><br><span class="xml">                window.location.href=res.data.result;</span><br><span class="xml">            &#125;else &#123;</span><br><span class="xml">                var mainContainer = document.getElementById(&#x27;main1&#x27;);</span><br><br><span class="xml">                var chart = echarts.init(mainContainer);</span><br><br><span class="xml">                var data = [];</span><br><span class="xml">                for (var name in res.data.result) &#123;</span><br><span class="xml">                    data.push(&#123;</span><br><span class="xml">                        name: name,</span><br><span class="xml">                        value: Math.sqrt(res.data.result[name])</span><br><span class="xml">                    &#125;)</span><br><span class="xml">                &#125;</span><br><br><span class="xml">                var maskImage = new Image();</span><br><span class="xml">                maskImage.src = &#x27;./images/logo.png&#x27;;</span><br><br><span class="xml">                var option = &#123;</span><br><span class="xml">                    title: &#123;</span><br><span class="xml">                        text: &#x27;所有新闻内容 jieba分词 的词云展示&#x27;</span><br><span class="xml">                    &#125;,</span><br><span class="xml">                    series: [&#123;</span><br><span class="xml">                        type: &#x27;wordCloud&#x27;,</span><br><span class="xml">                        sizeRange: [12, 60],</span><br><span class="xml">                        rotationRange: [-90, 90],</span><br><span class="xml">                        rotationStep: 45,</span><br><span class="xml">                        gridSize: 2,</span><br><span class="xml">                        shape: &#x27;circle&#x27;,</span><br><span class="xml">                        maskImage: maskImage,</span><br><span class="xml">                        drawOutOfBound: false,</span><br><span class="xml">                        textStyle: &#123;</span><br><span class="xml">                            normal: &#123;</span><br><span class="xml">                                fontFamily: &#x27;sans-serif&#x27;,</span><br><span class="xml">                                fontWeight: &#x27;bold&#x27;,</span><br><span class="xml">                                // Color can be a callback function or a color string</span><br><span class="xml">                                color: function () &#123;</span><br><span class="xml">                                    // Random color</span><br><span class="xml">                                    return &#x27;rgb(&#x27; + [</span><br><span class="xml">                                        Math.round(Math.random() * 160),</span><br><span class="xml">                                        Math.round(Math.random() * 160),</span><br><span class="xml">                                        Math.round(Math.random() * 160)</span><br><span class="xml">                                    ].join(&#x27;,&#x27;) + &#x27;)&#x27;;</span><br><span class="xml">                                &#125;</span><br><span class="xml">                            &#125;,</span><br><span class="xml">                            emphasis: &#123;</span><br><span class="xml">                                shadowBlur: 10,</span><br><span class="xml">                                shadowColor: &#x27;#333&#x27;</span><br><span class="xml">                            &#125;</span><br><span class="xml">                        &#125;,</span><br><span class="xml">                        data: data</span><br><span class="xml">                    &#125;]</span><br><span class="xml">                &#125;;</span><br><br><span class="xml">                maskImage.onload = function () &#123;</span><br><span class="xml">                    // option.series[0].data = data;</span><br><span class="xml">                    chart.clear();</span><br><span class="xml">                    chart.setOption(option);</span><br><span class="xml">                &#125;;</span><br><br><span class="xml">                window.onresize = function () &#123;</span><br><span class="xml">                    chart.resize();</span><br><span class="xml">                &#125;;</span><br><span class="xml">            &#125;</span><br><br><span class="xml">        &#125;);</span><br><span class="xml">&#125;</span><br></code></pre></td></tr></table></figure>
@@ -160,205 +223,93 @@
 
 
 <h2 id="管理界面"><a href="#管理界面" class="headerlink" title="管理界面"></a>管理界面</h2><p>实现了一个简易的网站管理端，可以手动添加用户，停用或者启用某一用户，查看某一用户的登入登出记录</p>
-<p><img src="https://i.loli.net/2021/06/30/C6WIUpamLEc2Pdw.png" alt="Snipaste_2021-06-30_16-18-56.png"></p>
-<p><img src="https://i.loli.net/2021/06/30/phSqR6Y4L2mBWOQ.png" alt="Snipaste_2021-06-30_16-19-49.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/C6WIUpamLEc2Pdw.png" alt="Snipaste_2021-06-30_16-18-56.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/30/phSqR6Y4L2mBWOQ.png" alt="Snipaste_2021-06-30_16-19-49.png" class="lazyload"></p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 用户管理功能</span><br>router.get(<span class="hljs-string">&#x27;/stopuser&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    <span class="hljs-comment">// console.log(req.query.id);</span><br>    <span class="hljs-keyword">const</span> sqlStr = <span class="hljs-string">&quot;update user set valid=0 where id=?&quot;</span>;<br>    db.query(sqlStr, [req.query.id], <span class="hljs-function">(<span class="hljs-params">err, results</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> &#123; <span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-number">500</span>, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;停用用户失败失败！&quot;</span>&#125;;<br>        <span class="hljs-keyword">if</span> (results.affectedRows === <span class="hljs-number">1</span>) &#123;<br>            &#123;<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;更新数据成功!&#x27;</span>)&#125;;<br>            <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-number">200</span>,<span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;停用用户成功！&quot;</span>&#125;;<br>        &#125;<br>    &#125;)<br>&#125;)<br><br>router.get(<span class="hljs-string">&#x27;/startuser&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    <span class="hljs-comment">// console.log(req.query.id);</span><br>    <span class="hljs-keyword">const</span> sqlStr = <span class="hljs-string">&quot;update user set valid=1 where id=?&quot;</span>;<br>    db.query(sqlStr, [req.query.id], <span class="hljs-function">(<span class="hljs-params">err, results</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> &#123; <span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-number">500</span>, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;启用用户失败！&quot;</span>&#125;;<br>        <span class="hljs-keyword">if</span> (results.affectedRows === <span class="hljs-number">1</span>) &#123;<br>            &#123;<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;更新数据成功!&#x27;</span>)&#125;;<br>            <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-number">200</span>,<span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;启用用户成功！&quot;</span>&#125;;<br>        &#125;<br>    &#125;)<br>&#125;)<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 日志查询功能</span><br>router.get(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    db.query(<span class="hljs-string">&#x27;select * from user_action&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, result</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.log(err.message);<br>        res.send(result);<br>    &#125;)<br>&#125;);<br></code></pre></td></tr></table></figure>
 
 <p>以上就是本次添加的新功能。</p>
 
-      </section>
+  </article>
 
-      <section class="article-footer">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular/" rel="tag">#Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Express/" rel="tag">#Express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">#Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">#前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">#后端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">#数据库</a></li></ul>
-      </section>
-
-      <section class="article-navs">
-        
-<nav class="card-container card-article-nav">
-  <div class="card-list">
+  
     
+  <div class="nexmoe-post-copyright">
+    <strong>Author：</strong>Sidney<br>
+    <strong>Link：</strong><a href="https://sidney233.github.io/2021/06/30/Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B/" title="https:&#x2F;&#x2F;sidney233.github.io&#x2F;2021&#x2F;06&#x2F;30&#x2F;Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;sidney233.github.io&#x2F;2021&#x2F;06&#x2F;30&#x2F;Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B&#x2F;</a><br>
     
-      <div id="article-nav-older" class="card-item img">
-        <article>
-          
-            <div class="card-cover" style="background-image: url(https://i.loli.net/2021/04/29/7hWYOio4tbqI8FE.jpg)"></div>
-          
-          <a class="card-link article-nav-link" href="/2021/04/28/Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93/"></a>
-          <strong class="article-nav-caption">Older</strong>
-          <p class="article-nav-title">
-            
-              Node.js实现爬虫和后端查询数据库
-            
-          </p>
-        </article>
-      </div>
+      <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
   </div>
-</nav>
 
-      </section>
-    </div>
-  </article>
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Web%E7%BC%96%E7%A8%8B/">Web编程</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Angular/" rel="tag">Angular</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Express/" rel="tag">Express</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Node-js/" rel="tag">Node.js</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>
+    
 </div>
 
-    <!-- footer container -->
-<footer id="footer" class="footer">
-  <div class="footer-container">
-     
-    <p>&copy; 2021 <a href="/" target="_blank">Sidney</a></p>
-
-    
-      <p id="hitokoto"></p>
-      <script src="https://v1.hitokoto.cn/?c=a&amp;encode=js&select=%23hitokoto" defer></script>
-    
-
-    
-
-    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
-    
-    <!--
-    <div class="footer-container__texts">
-      <p>ヽ｀、ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
-      <p>｀、ヽ｀｀、ヽ、｀｀｀、｀、ヽ🌙｀｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀｀、｀ヽ、｀</p>
-      <p>｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、、、ヽヽ、｀｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
-      <p>ヽ｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀、、ヽヽ、｀Time waits for on one 🍓｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
-      <p>｀ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ｀ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
+  <div class="nexmoe-post-footer">
+    <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '61391c5c49d04d750649',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+  </div>
+</div>
+        <div class="nexmoe-post-right">
+          <div class="nexmoe-fixed">
+            <div class="nexmoe-tool"> 
+              
+                
+              
+              <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+            </div>
+          </div>
+        </div>
     </div>
-    -->
   </div>
-</footer>
-  </div>
-
-  <div class="back-to-top-fixed">
-    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
-  <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
-  <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
-</svg> 
-  </div>
-
-  
-  
+  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
 
-  <!-- aplayer 音频 start -->
-  <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
-  <script type="text/javascript" src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
-  <script type="text/javascript">
-    const aplayer = document.querySelectorAll(".aplayer");
-    aplayer && initaplayer(aplayer);
-    function initaplayer(els) {
-      let elsArr = Array.from(els);
-      elsArr.forEach(el => {
-        let params = {
-          container: el,
-          audio: { ...el.dataset },
-          theme: "#b7daff",
-          autoplay: false,
-          loop: false,
-          mutex: true,
-        }
-        if (el.dataset.lrc) {
-          params['lrcType'] = 3
-        }
-        new APlayer(params);
-      });
-    }
-  </script>
-  <!-- aplayer 音频 end -->
-  
+<script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
+ 
 
-<!-- dplayer 视频 start -->
-<script type="text/javascript" src="https://unpkg.com/dplayer@1.25.1/dist/DPlayer.min.js"></script>
-<script type="text/javascript">
-  const dplayer = document.querySelectorAll(".dplayer");
-  dplayer && initDPlayer(dplayer);
-  function initDPlayer(els) {
-    let elsArr = Array.from(els);
-    elsArr.forEach(el => {
-      let url = el.dataset.url;
-      let cover = el.dataset.cover;
-      let subtitle = el.dataset.subtitle;
+<script async src="/js/app.js?v=1625751749377"></script>
 
-      let options = {
-        container: el,
-        video: { url: url, pic: cover },
-        theme: "#b7daff",
-        autoplay: false,
-        loop: false,
-        mutex: true,
-      }
-
-      if (subtitle) {
-        options.subtitle = {
-          url: el.dataset.subtitle,
-        }
-      }
-      new DPlayer(options);
-    });
-  }
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
 </script>
-<!-- dplayer 视频 end -->
-
-
-<!-- waterfall 瀑布流 start -->
-
-<script src="/lib/waterfall.min.js"></script>
-
-<script type="text/javascript">
-
-const waterfalls = document.querySelectorAll(".waterfall-container");
-
-if (waterfalls && waterfalls.length > 0) {
-  waterfalls.forEach((waterfall, index) => {
-    let cls = "waterfall-container-" + index;
-    waterfall.classList.add(cls);
-    initWaterfall(cls, waterfall);
-  });
-}
-
-function initWaterfall(selector, el) {
-  const options = {};
-  if (Object.keys(el.dataset).length > 0) {
-    for (let k in el.dataset) {
-      options[k] = el.dataset[k];
-    }
-  }
-  waterfall(`.${selector}`, options);
-}
-</script>
-<!-- waterfall 瀑布流 end -->
-
-
-  <!-- zoom start -->
-  
-<script src="/lib/zoom.min.js"></script>
-
-  <script type="text/javascript">
-    document.querySelector(".article-content") && zoom(".article-content");
-  </script>
-  <!-- zoom end -->
-  
-
-
-
-  
-
-
-  
-
 
   
 
 
 
 
-<script src="/js/script.js"></script>
 
-
-  
-  <!-- 尾部用户自定义相关内容 -->
 </body>
+
 </html>

@@ -1,143 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="zh">
+
 <head>
+  
+  <title>Node.js实现爬虫和后端查询数据库 - Sidney的博客</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#3367D6"/>
-  <link rel="apple-touch-icon" href="/icons-192.png">
-  <link rel="manifest" href="/manifest.json">
-
+  <meta name="description" content="博客网站搭建中~">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
   
-    <meta name="description" content="博客网站搭建中~">
   
 
+  <link rel="shortcut icon" href="/favicon.ico" type="image/png" />
+  <meta name="description" content="使用Node.js实现了一个爬虫，爬取新闻并将结果放入MySQL数据库中，最后使用Node.js的Express框架搭建一个小网站对新闻进行展示。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js实现爬虫和后端查询数据库">
+<meta property="og:url" content="https://sidney233.github.io/2021/04/28/Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Sidney的博客">
+<meta property="og:description" content="使用Node.js实现了一个爬虫，爬取新闻并将结果放入MySQL数据库中，最后使用Node.js的Express框架搭建一个小网站对新闻进行展示。">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/04/29/LgrEobdlmc8vI6Y.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/29/cJWwBaAsbjCvXG6.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/29/B7NAEVhTGYWxJdR.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/29/N7jdluSH2gmDaOF.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/30/bh6ytsJwSNLzcDx.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/30/y95EY6h7XIDdBaG.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/30/6YdOQsGDbPXeVhy.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/30/JQO8NBHaDU473ZV.png">
+<meta property="article:published_time" content="2021-04-28T12:59:00.000Z">
+<meta property="article:modified_time" content="2021-07-08T03:20:23.426Z">
+<meta property="article:author" content="Sidney">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="后端">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Express">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/29/LgrEobdlmc8vI6Y.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/hexo-theme-nexmoe@latest/source/lib/mdui_043tiny/css/mdui.css,npm/hexo-theme-nexmoe@latest/source/lib/iconfont/iconfont.css?v=233" crossorigin>
+  <link rel="stylesheet" href="/css/style.css?v=1625751749378">
   
-
-  
-    <meta name="author" content="Sidney">
-  
-
-  
-
-  
-
-  <title>Node.js实现爬虫和后端查询数据库 | Sidney</title>
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@1.1.3/index.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs@9.16.2/styles/monokai.css">
-  
-
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1625751749378">
 <meta name="generator" content="Hexo 5.4.0"></head>
-<body>
-  <div class="root-container">
-    <!-- navbar -->
-<nav class="navbar">
-  <div class="navbar-content">
-    <!-- logo -->
-    <div class="navbar-logo">
-      <a href="/">
-        
-          Sidney
-        
-      </a>
-    </div>
-    <!-- link -->
-    <div class="navbar-link">
-      <div class="navbar-btn">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <ul class="navbar-list">
-        
-          <li class="navbar-list-item"><a href="/">HOME</a></li>
-        
-      </ul>
+
+<body class="mdui-drawer-body-left">
+  
+  <div id="nexmoe-background">
+    <div class="nexmoe-bg" style="background-image: url(https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+    <div class="mdui-appbar mdui-shadow-0">
+      <div class="mdui-toolbar">
+        <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+        <a href="/" title="Sidney" class="mdui-btn mdui-btn-icon"><img src="https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/avatar.png" alt="Sidney"></a>
+       </div>
     </div>
   </div>
-</nav>
+  <div id="nexmoe-header">
+      <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Sidney">
+            <img src="https://cdn.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/avatar.png" alt="Sidney" alt="Sidney">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>2</div>
+        <div><span>Tags</span>7</div>
+        <div><span>Categories</span>1</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+            <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+        </form>
+    </div>
+</div>
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://jq.qq.com/?_wv=1027&k=5CfKHun" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/20238211" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/nexmoe/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Web编程/">Web编程</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Express/" style="font-size: 20px;">Express</a> <a href="/tags/Node-js/" style="font-size: 20px;">Node.js</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 20px;">前端</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 20px;">后端</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 20px;">数据库</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a>
+    </div>
+    
+  </div>
+
+  
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2021 Sidney
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+  </div>
+  <div id="nexmoe-content">
+    <div class="nexmoe-primary">
+        <div class="nexmoe-post">
+
+  <article>
+    
+        <div class="nexmoe-post-cover" style="padding-bottom: NaN%;"> 
+            <img data-src="https://i.loli.net/2021/04/29/7hWYOio4tbqI8FE.jpg" data-sizes="auto" alt="Node.js实现爬虫和后端查询数据库" class="lazyload">
+            <h1>Node.js实现爬虫和后端查询数据库</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年04月28日</a>
+    <a><i class="nexmoefont icon-areachart"></i>3.7k 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 20 分钟</a>
+</div>
 
     
-<!-- header container -->
-<header class="header-container post">
 
-  
-  
+    <p>使用Node.js实现了一个爬虫，爬取新闻并将结果放入MySQL数据库中，最后使用Node.js的Express框架搭建一个小网站对新闻进行展示。</p>
+<span id="more"></span>
 
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-    <div class="header-content">
-      
-        <div class="post-image" style="background-image: url(https://i.loli.net/2021/04/29/7hWYOio4tbqI8FE.jpg)"></div>
-      
-
-      <div class="post-text">
-        <div class="type-wrap">
-          <a class="article-category-link" href="/categories/Web%E7%BC%96%E7%A8%8B/">Web编程</a>
-        </div>
-        <h1 class="title-wrap">Node.js实现爬虫和后端查询数据库</h1>
-        <h2 class="title-sub-wrap">
-          <strong>Sidney</strong>
-          <span>发布于</span>
-          
-  <a href="javascript:;" class="article-date">
-    <time datetime="2021-04-28T12:59:00.000Z" itemprop="datePublished">2021-04-28</time>
-  </a>
-
-        </h2>
-      </div>
-    </div>
-  
-
-  
-  
-  
-</header>
-
-    <!-- 文章 -->
-
-<!-- 文章内容 -->
-
-<div class="body-container">
-  <article class="content-container article-container">
-    <div class="article-content">
-      
-      
-
-      <section class="article-entry">
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这是一个大三才学Web编程的苦逼数据专业中下游学生的期中作业，大概用Node.js写了一个小爬虫，然后用Node.js搭建了一个可以查询数据库的后端。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这是一个大三才学Web编程的苦逼数据专业中下游学生的期中作业，大概用Node.js写了一个小爬虫，然后用Node.js搭建了一个可以查询数据库的后端。</p>
 <h2 id="分析种子网站"><a href="#分析种子网站" class="headerlink" title="分析种子网站"></a>分析种子网站</h2><p>第一个目标是腾讯新闻，打开腾讯新闻的网站：<a target="_blank" rel="noopener" href="https://www.qq.com/">腾讯首页 (qq.com)</a></p>
-<p><img src="https://i.loli.net/2021/04/29/LgrEobdlmc8vI6Y.png" alt="Snipaste_2021-04-29_08-58-21.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/29/LgrEobdlmc8vI6Y.png" alt="Snipaste_2021-04-29_08-58-21.png" class="lazyload"></p>
 <p>查看其源代码发现文章的url格式为</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://new.qq.com/omn/20210428/20210428A05F5600.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2021/04/29/cJWwBaAsbjCvXG6.png" alt="Snipaste_2021-04-29_09-00-55.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/29/cJWwBaAsbjCvXG6.png" alt="Snipaste_2021-04-29_09-00-55.png" class="lazyload"></p>
 <p>则对应的正则表达式为</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> url_reg = <span class="hljs-regexp">/omn\/(\d&#123;8&#125;)\/([A-Z0-9]&#123;16&#125;).html/</span>;<br></code></pre></td></tr></table></figure>
 
 <h2 id="分析新闻页面"><a href="#分析新闻页面" class="headerlink" title="分析新闻页面"></a>分析新闻页面</h2><p>对于其中一篇文章，查看其源代码，发现我们需要的几个属性分别对应的标签如下</p>
-<p><img src="https://i.loli.net/2021/04/29/B7NAEVhTGYWxJdR.png" alt="Snipaste_2021-04-29_09-03-35.png"></p>
-<p><img src="https://i.loli.net/2021/04/29/N7jdluSH2gmDaOF.png" alt="Snipaste_2021-04-29_09-05-48.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/29/B7NAEVhTGYWxJdR.png" alt="Snipaste_2021-04-29_09-03-35.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/29/N7jdluSH2gmDaOF.png" alt="Snipaste_2021-04-29_09-05-48.png" class="lazyload"></p>
 <p>则代码如下</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> keywords_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;keywords\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> title_format = <span class="hljs-string">&quot;$(&#x27;title&#x27;).text()&quot;</span>;<br><span class="hljs-keyword">var</span> date_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;apub:time\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> author_format = <span class="hljs-string">&quot;&quot;</span>;<span class="hljs-comment">//腾讯的新闻页面没有作者或者编辑相关字段</span><br><span class="hljs-keyword">var</span> content_format = <span class="hljs-string">&quot;$(&#x27;.one-p&#x27;).text()&quot;</span>;<br><span class="hljs-keyword">var</span> desc_format = <span class="hljs-string">&quot; $(&#x27;meta[name=\&quot;description\&quot;]&#x27;).eq(0).attr(\&quot;content\&quot;)&quot;</span>;<br><span class="hljs-keyword">var</span> source_format = <span class="hljs-string">&quot;&quot;</span>;<span class="hljs-comment">//腾讯的新闻页面没有source相关字段</span><br></code></pre></td></tr></table></figure>
 
@@ -292,9 +351,9 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs web-idl">http:&#x2F;&#x2F;localhost:3000&#x2F;search.html<br></code></pre></td></tr></table></figure>
 
 <p>可以看到查询的页面如下</p>
-<p><img src="https://i.loli.net/2021/04/30/bh6ytsJwSNLzcDx.png" alt="Snipaste_2021-04-30_10-52-02.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/30/bh6ytsJwSNLzcDx.png" alt="Snipaste_2021-04-30_10-52-02.png" class="lazyload"></p>
 <p>在输入框中输入想要查询的标题，下面就会以表格的形式进行展示</p>
-<p><img src="https://i.loli.net/2021/04/30/y95EY6h7XIDdBaG.png" alt="Snipaste_2021-04-30_10-53-57.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/30/y95EY6h7XIDdBaG.png" alt="Snipaste_2021-04-30_10-53-57.png" class="lazyload"></p>
 <p>继续在路由中添加一个可以统计搜索文章的时间热度，即某天包含某关键词的文章发表了多少篇。</p>
 <p>继续修改routes/index.js文件，修改后如下</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">var</span> router = express.Router();<br><span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../mysql.js&#x27;</span>);<br><br><span class="hljs-comment">/* GET home page. */</span><br>router.get(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>&#123;<br>    res.render(<span class="hljs-string">&#x27;index&#x27;</span>, &#123; <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Express&#x27;</span> &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 新添加了一个路由，用做查询数据库并返回查询结果</span><br>router.get(<span class="hljs-string">&#x27;/process_get&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-comment">//sql字符串和参数</span><br>    <span class="hljs-keyword">var</span> fetchSql = <span class="hljs-string">&quot;select url,source_name,title,author,publish_date &quot;</span> +<br>        <span class="hljs-string">&quot;from fetches where title like &#x27;%&quot;</span> + request.query.title + <span class="hljs-string">&quot;%&#x27;&quot;</span>;<br>    mysql.query(fetchSql, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>        response.writeHead(<span class="hljs-number">200</span>, &#123;<br>            <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span><br>        &#125;);<br>        response.write(<span class="hljs-built_in">JSON</span>.stringify(result));<br>        response.end();<br>    &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 搜索发表时间并且按照时间聚类，统计数量</span><br>router.get(<span class="hljs-string">&#x27;/time_get&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>&#123;<br>    <span class="hljs-keyword">var</span> fetchSql = <span class="hljs-string">&quot;SELECT publish_date, COUNT(title) FROM fetches WHERE title LIKE &#x27;%&quot;</span>+ <br>    request.query.title +<span class="hljs-string">&quot;%&#x27; GROUP BY publish_date;&quot;</span>;<br>    mysql.query(fetchSql, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result, fields</span>) </span>&#123;<br>        response.writeHead(<span class="hljs-number">200</span>, &#123;<br>            <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span><br>        &#125;);<br>        response.write(<span class="hljs-built_in">JSON</span>.stringify(result));<br>        response.end();<br>    &#125;);<br>&#125;);<br><br><span class="hljs-built_in">module</span>.exports = router;<br></code></pre></td></tr></table></figure>
@@ -304,7 +363,7 @@
 
 <p>其中新添加了一个表格，用于展示时间热度。</p>
 <p>最后按照上面的流程访问更新后的网站，查询效果如下</p>
-<p><img src="https://i.loli.net/2021/04/30/6YdOQsGDbPXeVhy.png" alt="Snipaste_2021-04-30_11-02-35.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/30/6YdOQsGDbPXeVhy.png" alt="Snipaste_2021-04-30_11-02-35.png" class="lazyload"></p>
 <p>基本功能已经实现，下面是对展示效果进行优化，在search.html中加入css</p>
 <figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css">&lt;style&gt;<br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=text]</span>, select &#123;<br>      <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>      <span class="hljs-attribute">padding</span>: <span class="hljs-number">12px</span> <span class="hljs-number">20px</span>;<br>      <span class="hljs-attribute">margin</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0</span>;<br>      <span class="hljs-attribute">display</span>: inline-block;<br>      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#ccc</span>;<br>      <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;<br>      <span class="hljs-attribute">box-sizing</span>: border-box;<br>    &#125;<br>    <br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=button]</span> &#123;<br>      <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#98bf21</span>;<br>      <span class="hljs-attribute">color</span>: white;<br>      <span class="hljs-attribute">padding</span>: <span class="hljs-number">14px</span> <span class="hljs-number">20px</span>;<br>      <span class="hljs-attribute">margin</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0</span>;<br>      <span class="hljs-attribute">border</span>: none;<br>      <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;<br>      <span class="hljs-attribute">cursor</span>: pointer;<br>    &#125;<br>    <br>    <span class="hljs-selector-tag">input</span><span class="hljs-selector-attr">[type=button]</span><span class="hljs-selector-pseudo">:hover</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#98bf21</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span><br>    &#123;<br>        <span class="hljs-attribute">width</span>:<span class="hljs-number">100%</span>;<br>        <span class="hljs-attribute">border-collapse</span>:collapse;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">td</span>, <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1em</span>;<br>        <span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#98bf21</span>;<br>        <span class="hljs-attribute">padding</span>:<span class="hljs-number">3px</span> <span class="hljs-number">7px</span> <span class="hljs-number">2px</span> <span class="hljs-number">7px</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1.1em</span>;<br>        <span class="hljs-attribute">text-align</span><span class="hljs-selector-pseudo">:left</span>;<br>        <span class="hljs-attribute">padding-top</span>:<span class="hljs-number">5px</span>;<br>        <span class="hljs-attribute">padding-bottom</span>:<span class="hljs-number">4px</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#A7C942</span>;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#ffffff</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">tr</span><span class="hljs-selector-class">.alt</span> <span class="hljs-selector-tag">td</span> <br>    &#123;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#000000</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#EAF2D3</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span><br>    &#123;<br>        <span class="hljs-attribute">width</span>:<span class="hljs-number">100%</span>;<br>        <span class="hljs-attribute">border-collapse</span>:collapse;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">td</span>, <span class="hljs-selector-id">#record2</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1em</span>;<br>        <span class="hljs-attribute">border</span>:<span class="hljs-number">1px</span> solid <span class="hljs-number">#98bf21</span>;<br>        <span class="hljs-attribute">padding</span>:<span class="hljs-number">3px</span> <span class="hljs-number">7px</span> <span class="hljs-number">2px</span> <span class="hljs-number">7px</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">th</span> <br>    &#123;<br>        <span class="hljs-attribute">font-size</span>:<span class="hljs-number">1.1em</span>;<br>        <span class="hljs-attribute">text-align</span><span class="hljs-selector-pseudo">:left</span>;<br>        <span class="hljs-attribute">padding-top</span>:<span class="hljs-number">5px</span>;<br>        <span class="hljs-attribute">padding-bottom</span>:<span class="hljs-number">4px</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#A7C942</span>;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#ffffff</span>;<br>    &#125;<br>    <span class="hljs-selector-id">#record1</span> <span class="hljs-selector-tag">tr</span><span class="hljs-selector-class">.alt</span> <span class="hljs-selector-tag">td</span> <br>    &#123;<br>        <span class="hljs-attribute">color</span>:<span class="hljs-number">#000000</span>;<br>        <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#EAF2D3</span>;<br>    &#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
 
@@ -313,200 +372,88 @@
 <figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><br><span class="javascript">    $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">        $(<span class="hljs-string">&quot;input:button&quot;</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="javascript">            $.get(<span class="hljs-string">&#x27;/time_get?title=&#x27;</span> + $(<span class="hljs-string">&quot;input:text&quot;</span>).val(), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;</span><br><span class="javascript">                $(<span class="hljs-string">&quot;#record1&quot;</span>).empty();</span><br><span class="handlebars"><span class="xml">                $(&quot;#record1&quot;).append(&#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>发布时间<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>数量<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>&#x27;);</span></span><br><span class="javascript">                <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;</span><br><span class="javascript">                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> list <span class="hljs-keyword">of</span> data) &#123;</span><br><span class="javascript">                    <span class="hljs-keyword">let</span> regExp = <span class="hljs-regexp">/((\d&#123;4&#125;|\d&#123;2&#125;)(\-|\/|\.)\d&#123;1,2&#125;\3\d&#123;1,2&#125;)/</span>;</span><br><span class="handlebars"><span class="xml">                    let table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alt&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br>                    if (i % 2 == 0) &#123;<br><span class="handlebars"><span class="xml">                        table = &#x27;<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;;</span></span><br>                    &#125;<br><span class="javascript">                    <span class="hljs-built_in">Object</span>.values(list).forEach(<span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span> &#123;</span><br>                        if (regExp.test(element)) element = regExp.exec(element)[0];<br><span class="handlebars"><span class="xml">                        table += (element + &#x27;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#x27;);</span></span><br>                    &#125;);<br><span class="javascript">                    <span class="hljs-keyword">let</span> out_table = table.substring(<span class="hljs-number">0</span>, table.length - <span class="hljs-number">4</span>) <span class="hljs-comment">// 这里减去多于的&lt;td&gt;</span></span><br><span class="javascript">                    $(<span class="hljs-string">&quot;#record1&quot;</span>).append(out_table + <span class="hljs-string">&#x27;&lt;/tr&gt;&#x27;</span>);</span><br>                    i++;<br>                &#125;<br>            &#125;);<br>        &#125;);<br><br>    &#125;);<br><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
 <p>最后效果如下</p>
-<p><img src="https://i.loli.net/2021/04/30/JQO8NBHaDU473ZV.png" alt="Snipaste_2021-04-30_13-29-45.png"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/04/30/JQO8NBHaDU473ZV.png" alt="Snipaste_2021-04-30_13-29-45.png" class="lazyload"></p>
 <p>完整代码参见<a target="_blank" rel="noopener" href="https://github.com/Sidney233/Node.js_crawler">Sidney233/Node.js_crawler: 使用Node.js爬取新闻网页并实现一个简单的网页用于查询爬取数据 (github.com)</a></p>
 
-      </section>
+  </article>
 
-      <section class="article-footer">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Express/" rel="tag">#Express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">#Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">#前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">#后端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">#数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">#爬虫</a></li></ul>
-      </section>
-
-      <section class="article-navs">
-        
-<nav class="card-container card-article-nav">
-  <div class="card-list">
+  
     
-      <div id="article-nav-newer" class="card-item img">
-        <article>
-          
-            <div class="card-cover" style="background-image: url(https://i.loli.net/2021/06/30/ADOs5BCd8mFglVr.jpg)"></div>
-          
-          <a class="card-link article-nav-link" href="/2021/06/30/Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B/"></a>
-          <strong class="article-nav-caption">Newer</strong>
-          <p class="article-nav-title">
-            
-              Web期末项目——对期中项目的改进
-            
-          </p>
-        </article>
-      </div>
+  <div class="nexmoe-post-copyright">
+    <strong>Author：</strong>Sidney<br>
+    <strong>Link：</strong><a href="https://sidney233.github.io/2021/04/28/Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93/" title="https:&#x2F;&#x2F;sidney233.github.io&#x2F;2021&#x2F;04&#x2F;28&#x2F;Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;sidney233.github.io&#x2F;2021&#x2F;04&#x2F;28&#x2F;Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;</a><br>
     
+      <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
   </div>
-</nav>
 
-      </section>
-    </div>
-  </article>
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Web%E7%BC%96%E7%A8%8B/">Web编程</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Express/" rel="tag">Express</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Node-js/" rel="tag">Node.js</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
+    
 </div>
 
-    <!-- footer container -->
-<footer id="footer" class="footer">
-  <div class="footer-container">
-     
-    <p>&copy; 2021 <a href="/" target="_blank">Sidney</a></p>
-
-    
-      <p id="hitokoto"></p>
-      <script src="https://v1.hitokoto.cn/?c=a&amp;encode=js&select=%23hitokoto" defer></script>
-    
-
-    
-
-    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
-    
-    <!--
-    <div class="footer-container__texts">
-      <p>ヽ｀、ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
-      <p>｀、ヽ｀｀、ヽ、｀｀｀、｀、ヽ🌙｀｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、ヽ｀｀、｀ヽ、｀</p>
-      <p>｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀ヽ｀ヽ、ヽ｀、ヽ｀ヽ、ヽ｀、、、ヽヽ、｀｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
-      <p>ヽ｀、｀｀、｀、ヽ｀｀、、ヽヽ｀、｀、、ヽヽ、｀Time waits for on one 🍓｀、、ヽ｀、ヽ｀｀、ヽ｀ヽ｀</p>
-      <p>｀ヽ｀｀、ヽ｀ヽ｀、、ヽ｀ヽ｀ヽ｀ヽ、ヽ｀、ヽ｀｀、ヽ、｀｀、、ヽ｀ヽ、｀｀、、ヽ｀ヽ、｀ヽ、｀ヽ、｀ヽ</p>
+  <div class="nexmoe-post-footer">
+    <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '61391c5c49d04d750649',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+  </div>
+</div>
+        <div class="nexmoe-post-right">
+          <div class="nexmoe-fixed">
+            <div class="nexmoe-tool"> 
+              
+                
+              
+              <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+            </div>
+          </div>
+        </div>
     </div>
-    -->
   </div>
-</footer>
-  </div>
-
-  <div class="back-to-top-fixed">
-    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
-  <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
-  <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
-</svg> 
-  </div>
-
-  
-  
+  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
 
-  <!-- aplayer 音频 start -->
-  <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
-  <script type="text/javascript" src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
-  <script type="text/javascript">
-    const aplayer = document.querySelectorAll(".aplayer");
-    aplayer && initaplayer(aplayer);
-    function initaplayer(els) {
-      let elsArr = Array.from(els);
-      elsArr.forEach(el => {
-        let params = {
-          container: el,
-          audio: { ...el.dataset },
-          theme: "#b7daff",
-          autoplay: false,
-          loop: false,
-          mutex: true,
-        }
-        if (el.dataset.lrc) {
-          params['lrcType'] = 3
-        }
-        new APlayer(params);
-      });
-    }
-  </script>
-  <!-- aplayer 音频 end -->
-  
+<script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
+ 
 
-<!-- dplayer 视频 start -->
-<script type="text/javascript" src="https://unpkg.com/dplayer@1.25.1/dist/DPlayer.min.js"></script>
-<script type="text/javascript">
-  const dplayer = document.querySelectorAll(".dplayer");
-  dplayer && initDPlayer(dplayer);
-  function initDPlayer(els) {
-    let elsArr = Array.from(els);
-    elsArr.forEach(el => {
-      let url = el.dataset.url;
-      let cover = el.dataset.cover;
-      let subtitle = el.dataset.subtitle;
+<script async src="/js/app.js?v=1625751749379"></script>
 
-      let options = {
-        container: el,
-        video: { url: url, pic: cover },
-        theme: "#b7daff",
-        autoplay: false,
-        loop: false,
-        mutex: true,
-      }
-
-      if (subtitle) {
-        options.subtitle = {
-          url: el.dataset.subtitle,
-        }
-      }
-      new DPlayer(options);
-    });
-  }
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
 </script>
-<!-- dplayer 视频 end -->
-
-
-<!-- waterfall 瀑布流 start -->
-
-<script src="/lib/waterfall.min.js"></script>
-
-<script type="text/javascript">
-
-const waterfalls = document.querySelectorAll(".waterfall-container");
-
-if (waterfalls && waterfalls.length > 0) {
-  waterfalls.forEach((waterfall, index) => {
-    let cls = "waterfall-container-" + index;
-    waterfall.classList.add(cls);
-    initWaterfall(cls, waterfall);
-  });
-}
-
-function initWaterfall(selector, el) {
-  const options = {};
-  if (Object.keys(el.dataset).length > 0) {
-    for (let k in el.dataset) {
-      options[k] = el.dataset[k];
-    }
-  }
-  waterfall(`.${selector}`, options);
-}
-</script>
-<!-- waterfall 瀑布流 end -->
-
-
-  <!-- zoom start -->
-  
-<script src="/lib/zoom.min.js"></script>
-
-  <script type="text/javascript">
-    document.querySelector(".article-content") && zoom(".article-content");
-  </script>
-  <!-- zoom end -->
-  
-
-
-
-  
-
-
-  
-
 
   
 
 
 
 
-<script src="/js/script.js"></script>
 
-
-  
-  <!-- 尾部用户自定义相关内容 -->
 </body>
+
 </html>
