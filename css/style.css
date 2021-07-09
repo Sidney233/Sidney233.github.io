@@ -154,7 +154,7 @@ article code::-webkit-scrollbar-thumb {
   overflow: auto;
 }
 .highlight * {
-  font-family: monospace;
+  font-family: Consolas;
 }
 .highlight .line {
   padding: 0 1em;
