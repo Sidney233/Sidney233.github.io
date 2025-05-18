@@ -6,7 +6,7 @@
   <link href="https://sidney233.github.io/atom.xml" rel="self"/>
   
   <link href="https://sidney233.github.io/"/>
-  <updated>2021-07-08T14:27:16.000Z</updated>
+  <updated>2025-05-18T07:46:55.133Z</updated>
   <id>https://sidney233.github.io/</id>
   
   <author>
@@ -17,9 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Centos7安装配置Mariadb</title>
+    <link href="https://sidney233.github.io/posts/40278/"/>
+    <id>https://sidney233.github.io/posts/40278/</id>
+    <published>2025-05-18T07:40:36.000Z</published>
+    <updated>2025-05-18T07:46:55.133Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Centos7安装配置Mariadb"><a href="#Centos7安装配置Mariadb" class="headerlink" title="Centos7安装配置Mariadb"></a>Centos7安装配置Mariadb</h1><p>因为之前用的 MariaDB 服务器还装了 GitLab，服务器卡顿严重，现在重新在一台空闲服务器上重新装一个MariaDB。</p><h2 id="配置-yum-repo"><a href="#配置-yum-repo" class="headerlink" title="配置 yum repo"></a>配置 yum repo</h2><p>生产环境装的 MariaDB 是10.3.x，首先去 <a href="https://mariadb.org/download">MariaDB 官网</a>看一下目前的稳定版本</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171608141.png" alt="image-20250517160857080"></p><p>可以看到最接近的是10.5.29，将下面选项卡切换到 <strong>MariaDB Server Repositories</strong>，然后选择系统发行版本和所需要的 MariaDB 版本</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171611433.png" alt="image-20250517161154365"></p><p>最后镜像选择清华大学的。根据官网提示，我们需要去系统的 repo 目录中配置一个 MariaDB.repo。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">MariaDB 10.5 RedHatEnterpriseLinux repository list - created 2025-05-17 08:10 UTC</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">https://mariadb.org/download/</span></span><br><span class="line">[mariadb]</span><br><span class="line">name = MariaDB</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">rpm.mariadb.org is a dynamic mirror <span class="keyword">if</span> your preferred mirror goes offline. See https://mariadb.org/mirrorbits/ <span class="keyword">for</span> details.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">baseurl = https://rpm.mariadb.org/10.5/rhel/<span class="variable">$releasever</span>/<span class="variable">$basearch</span></span></span><br><span class="line">baseurl = https://mirrors.tuna.tsinghua.edu.cn/mariadb/yum/10.5/rhel/$releasever/$basearch</span><br><span class="line">module_hotfixes = 1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB</span></span><br><span class="line">gpgkey = https://mirrors.tuna.tsinghua.edu.cn/mariadb/yum/RPM-GPG-KEY-MariaDB</span><br><span class="line">gpgcheck = 1</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>将上述配置文件新建在目录中即可</p><h2 id="下载安装-MariaDB"><a href="#下载安装-MariaDB" class="headerlink" title="下载安装 MariaDB"></a>下载安装 MariaDB</h2><p>配置完成后按照官网提示安装</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171641057.png" alt="image-20250517164132984"></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install MariaDB-server MariaDB-client</span><br></pre></td></tr></table></figure><p>如果网络正常的话这里几分钟就能安装成功</p><p>最后输入命令启动 MariaDB 并且设置自动启动</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mariadb # 启动</span><br><span class="line">systemctl enable mariadb # 设置开机启动</span><br></pre></td></tr></table></figure><h2 id="配置-MariaDB"><a href="#配置-MariaDB" class="headerlink" title="配置 MariaDB"></a>配置 MariaDB</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure><p>使用上述命令进入 MariaDB &#x2F; MySQL 的配置界面</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enter current password for root (enter for none):</span><br></pre></td></tr></table></figure><p>会提示输入密码，这里直接按回车，因为初始密码为空</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Setting the root password or using the unix_socket ensures that nobody</span><br><span class="line">can log into the MariaDB root user without the proper authorisation.</span><br><span class="line"></span><br><span class="line">You already have your root account protected, so you can safely answer &#x27;n&#x27;.</span><br><span class="line"></span><br><span class="line">Switch to unix_socket authentication [Y/n] </span><br></pre></td></tr></table></figure><p>输入密码后会提示是否设置 unix_socket 连接，这里选择 n，因为是测试环境，需要能够远程用root账户连接，如果是生产环境，建议选择 Y，这样 root 只能在服务器本地登录。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">You already have your root account protected, so you can safely answer &#x27;n&#x27;.</span><br><span class="line"></span><br><span class="line">Change the root password? [Y/n] </span><br></pre></td></tr></table></figure><p>选择 Y 修改 root 密码</p><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">By default, a MariaDB installation has an anonymous user, allowing anyone</span><br><span class="line">to log into MariaDB without having to have a user account created for</span><br><span class="line">them.  This is intended only for testing, and to make the installation</span><br><span class="line">go a bit smoother.  You should remove them before moving into a</span><br><span class="line">production environment.</span><br><span class="line"></span><br><span class="line">Remove anonymous users? [Y/n] </span><br></pre></td></tr></table></figure><p>删除匿名用户，根据提示，匿名用户可以直接连接 MariaDB，比较危险，这里选择 Y</p><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Normally, root should only be allowed to connect from &#x27;localhost&#x27;.  This</span><br><span class="line">ensures that someone cannot guess at the root password from the network.</span><br><span class="line"></span><br><span class="line">Disallow root login remotely? [Y/n] </span><br></pre></td></tr></table></figure><p>选择 Y 以开启 root 远程连接</p><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">By default, MariaDB comes with a database named &#x27;test&#x27; that anyone can</span><br><span class="line">access.  This is also intended only for testing, and should be removed</span><br><span class="line">before moving into a production environment.</span><br><span class="line"></span><br><span class="line">Remove test database and access to it? [Y/n] </span><br></pre></td></tr></table></figure><p>选择 Y 删除所有人都可访问的 test 数据库</p><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Reloading the privilege tables will ensure that all changes made so far</span><br><span class="line">will take effect immediately.</span><br><span class="line"></span><br><span class="line">Reload privilege tables now? [Y/n] </span><br></pre></td></tr></table></figure><p>选择 Y 使目前所有的设置都生效，否则需要手动重启</p><p>现在都已经设置完毕，我们进入 MariaDB 查看是否成功</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure><p>如果能够输入密码并且进入数据库则说明配置成功</p><h2 id="配置远程连接"><a href="#配置远程连接" class="headerlink" title="配置远程连接"></a>配置远程连接</h2><p>现在需要修改 MariaDB 的配置文件和 root 的允许访问的 IP 地址来实现远程连接。为了安全，MariaDB 默认是只能 127.0.0.1 访问（但是我所使用的这个版本使用上面初始化配置之后不需要配置 bind-address 就能远程连接，以防万一还是设置一下），需要修改为 0.0.0.0 来让内网中所有 IP 都能访问</p><h3 id="修改-MariaDB-配置文件"><a href="#修改-MariaDB-配置文件" class="headerlink" title="修改 MariaDB 配置文件"></a>修改 MariaDB 配置文件</h3><p>MariaDB 的默认配置文件在 <code>/etc/my.cnf</code>中</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/my.cnf</span><br></pre></td></tr></table></figure><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171814882.png" alt="image-20250517181423811"></p><p>可以看到只有两行配置，显示其他配置在 <code>/etc/my.cnf.d</code> 中</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171908972.png" alt="image-20250517190819913"></p><p>我们这里需要对 <code>server.cnf</code> 进行修改</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171914519.png" alt="image-20250517191400412"></p><p>可以看到这里的注释已经说明了，如果要允许所有 IP 地址的访问，取消注释 <code>bind-address=0.0.0.0</code> 这一行</p><p>重启 MariaDB</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mariadb</span><br></pre></td></tr></table></figure><p>查看 MariaDB 状态</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mariadb</span><br></pre></td></tr></table></figure><p>可以看到已经成功启动，并且地址为 <code>0.0.0.0:3306</code></p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171921561.png" alt="image-20250517192115449"></p><h3 id="修改-root-用户允许访问的-IP-地址"><a href="#修改-root-用户允许访问的-IP-地址" class="headerlink" title="修改 root 用户允许访问的 IP 地址"></a>修改 root 用户允许访问的 IP 地址</h3><p>进入数据库，输入以下查询语句</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line"><span class="keyword">select</span> host, <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505181113960.png" alt="image-20250518111358910"></p><p>可以看到 root 用户的允许访问的 Host 仍为 localhost，这意味着只能在服务器本地登录进入 MariaDB 数据库</p><p>我们可以对这个字段进行修改</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RENAME <span class="keyword">USER</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> <span class="keyword">TO</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br></pre></td></tr></table></figure><p>再次查询就能看到 root 的 Host 被修改为 % ，意味着任意 IP 都能进行访问，如果是生产环境，这里的 % 建议修改为后端服务器的 IP 地址，这样就能拦截掉其他 IP 的访问</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505181121458.png" alt="image-20250518112055346"></p><h3 id="开放防火墙端口"><a href="#开放防火墙端口" class="headerlink" title="开放防火墙端口"></a>开放防火墙端口</h3><p>到这一步还是不能访问，因为防火墙的 3306 端口还没开放，所有的请求都会被拦截</p><p>首先使用 <code> firewall-cmd --state</code> 查看防火墙状态，如果未开启则不需要配置</p><p>如果防火墙开启，则需要输入</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=3306/tcp --permanent # 打开3306端口</span><br><span class="line">firewall-cmd --reload # 重新载入配置文件</span><br></pre></td></tr></table></figure><p>成功之后就能实现远程连接</p><h2 id="使用-Navicat-远程连接"><a href="#使用-Navicat-远程连接" class="headerlink" title="使用 Navicat 远程连接"></a>使用 Navicat 远程连接</h2><p>配置完成之后，为了方便我们在本地操作，可以使用 Navicat 配置远程连接，可以在图形化界面对数据库进行操作</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171929900.png" alt="image-20250517192951816"></p><p>点击连接，进入配置界面</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171930973.png" alt="image-20250517193025841"></p><p>选择 MariaDB</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505171931771.png" alt="image-20250517193122661"></p><p>按照实际情况填写即可</p><p>填完之后可以点击左下角的测试连接，检查是否联通</p><p>如果能联通就直接下一步，这样 Navicat 就会保存账号密码，以后每次都能直接连接</p><p><img src="https://cdn.jsdelivr.net/gh/Sidney233/PicBed@main/img/202505181123750.png" alt="image-20250518112322655"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Centos7安装配置Mariadb&quot;&gt;&lt;a href=&quot;#Centos7安装配置Mariadb&quot; class=&quot;headerlink&quot; title=&quot;Centos7安装配置Mariadb&quot;&gt;&lt;/a&gt;Centos7安装配置Mariadb&lt;/h1&gt;&lt;p&gt;因为之前用的</summary>
+      
+    
+    
+    
+    <category term="数据库" scheme="https://sidney233.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+    <category term="数据库" scheme="https://sidney233.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    <category term="Linux" scheme="https://sidney233.github.io/tags/Linux/"/>
+    
+    <category term="Centos" scheme="https://sidney233.github.io/tags/Centos/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Web期末项目——对期中项目的改进</title>
-    <link href="https://sidney233.github.io/2021/06/30/Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B/"/>
-    <id>https://sidney233.github.io/2021/06/30/Web%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94%E5%AF%B9%E6%9C%9F%E4%B8%AD%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%94%B9%E8%BF%9B/</id>
+    <link href="https://sidney233.github.io/posts/1efa055b/"/>
+    <id>https://sidney233.github.io/posts/1efa055b/</id>
     <published>2021-06-30T07:27:01.000Z</published>
     <updated>2021-07-08T14:27:16.000Z</updated>
     
@@ -33,11 +61,11 @@
     <category term="Web编程" scheme="https://sidney233.github.io/categories/Web%E7%BC%96%E7%A8%8B/"/>
     
     
+    <category term="数据库" scheme="https://sidney233.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
     <category term="前端" scheme="https://sidney233.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
     
     <category term="后端" scheme="https://sidney233.github.io/tags/%E5%90%8E%E7%AB%AF/"/>
-    
-    <category term="数据库" scheme="https://sidney233.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     <category term="Node.js" scheme="https://sidney233.github.io/tags/Node-js/"/>
     
@@ -49,8 +77,8 @@
   
   <entry>
     <title>Node.js实现爬虫和后端查询数据库</title>
-    <link href="https://sidney233.github.io/2021/04/28/Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>https://sidney233.github.io/2021/04/28/Node-js%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB%E5%92%8C%E5%90%8E%E7%AB%AF%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93/</id>
+    <link href="https://sidney233.github.io/posts/3832ff9/"/>
+    <id>https://sidney233.github.io/posts/3832ff9/</id>
     <published>2021-04-28T12:59:00.000Z</published>
     <updated>2021-07-08T14:27:16.000Z</updated>
     
@@ -64,17 +92,17 @@
     <category term="Web编程" scheme="https://sidney233.github.io/categories/Web%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="爬虫" scheme="https://sidney233.github.io/tags/%E7%88%AC%E8%99%AB/"/>
+    <category term="数据库" scheme="https://sidney233.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     <category term="前端" scheme="https://sidney233.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
     
     <category term="后端" scheme="https://sidney233.github.io/tags/%E5%90%8E%E7%AB%AF/"/>
     
-    <category term="数据库" scheme="https://sidney233.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
     <category term="Node.js" scheme="https://sidney233.github.io/tags/Node-js/"/>
     
     <category term="Express" scheme="https://sidney233.github.io/tags/Express/"/>
+    
+    <category term="爬虫" scheme="https://sidney233.github.io/tags/%E7%88%AC%E8%99%AB/"/>
     
   </entry>
   
