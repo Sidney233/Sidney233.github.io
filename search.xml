@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>Python 迭代器和生成器详解</title>
+      <link href="/posts/12366/"/>
+      <url>/posts/12366/</url>
+      
+        <content type="html"><![CDATA[<p>之前一直没怎么用过 Python 中的迭代器和生成器，这里记录一下原理和使用方法</p><h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><p>迭代器的数据结构类似于一个单项链表，每次使用的时候拿出一个头节点，然后单向的往后遍历，直到链表尾。</p><h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>这里引用菜鸟教程的迭代器的最简单使用方法</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">it = <span class="built_in">iter</span>(<span class="built_in">list</span>)<span class="comment"># 创建迭代器对象</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> it:</span><br><span class="line">    <span class="built_in">print</span> (x, end=<span class="string">&quot; &quot;</span>)</span><br></pre></td></tr></table></figure><p>不出意外的话终端会返回</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 3 4 </span><br></pre></td></tr></table></figure><p>那这样写有啥好处？只看遍历部分甚至和直接遍历 list 一模一样</p><p>想象一下你的需求是从一个10w行数据中（无序且没有索引），找到特定ID的用户</p><p>当然你可以使用 readlines 或者 pandas 直接读取10w条数据到内存中，然后挨个遍历，直到找到为止</p><p>但这样是不是太消耗内存了？如果需求是从100个这样的表中同时找数据，那么需要 100 倍上述的内存消耗，这在某些情况下是不可接受的</p><p>这时候如果使用迭代器，那就会减小很多内存消耗。对于上面描述的情况，迭代器每次迭代只会加载一行数据到内存中，这样的话，内存的消耗在理论上会变成原来的 1&#x2F;100000</p><h2 id="实现迭代器"><a href="#实现迭代器" class="headerlink" title="实现迭代器"></a>实现迭代器</h2><p>我们来实现一个简单的读取文件的迭代器</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileIterator</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, path</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        新建对象，根据路径新建文件对象</span></span><br><span class="line"><span class="string">        :param path: 文件路径</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.file = <span class="built_in">open</span>(path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        获取迭代器对象</span></span><br><span class="line"><span class="string">        :return: 返回对象本身 </span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        迭代器必须实现的函数，用于获取下一个元素</span></span><br><span class="line"><span class="string">        :return: 下一个元素</span></span><br><span class="line"><span class="string">        :raise: 如果没有下一个元素，跳出迭代</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        line = <span class="variable language_">self</span>.file.readline()</span><br><span class="line">        <span class="keyword">if</span> line:</span><br><span class="line">            <span class="keyword">return</span> line</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="variable language_">self</span>.file.close()</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br></pre></td></tr></table></figure><p>如果想要实现一个迭代器类，必须实现 <code>__iter__</code> 和 <code>__next__</code> 方法。根据第一个例子，我们可以写出如何使用这个文件迭代器</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">file_iterator = FileIterator(<span class="string">&quot;big_file.txt&quot;</span>)<span class="comment"># 创建迭代器对象</span></span><br><span class="line">target = <span class="string">&quot;userid&quot;</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> file_iterator:<span class="comment"># 遍历迭代器</span></span><br><span class="line">    <span class="keyword">if</span> line == target:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Find target user! &quot;</span>)</span><br></pre></td></tr></table></figure><p>对迭代器进行 for 循环遍历，实际上是隐式的调用了迭代器类中的 <code>__next__</code> 函数，这样就做到了取出下一个元素，如果取不出下一个元素，则 for 循环结束</p><h1 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h1><h2 id="生成器的迭代逻辑"><a href="#生成器的迭代逻辑" class="headerlink" title="生成器的迭代逻辑"></a>生成器的迭代逻辑</h2><p>可以认为，生成器就是一个返回值为一个迭代器的函数，下面用例子来说明</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">countdown</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">while</span> n &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">yield</span> n</span><br><span class="line">        n -= <span class="number">1</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 创建生成器对象</span></span><br><span class="line">generator = countdown(<span class="number">5</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 通过迭代生成器获取值</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">next</span>(generator))  <span class="comment"># 输出: 5</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">next</span>(generator))  <span class="comment"># 输出: 4</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">next</span>(generator))  <span class="comment"># 输出: 3</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 使用 for 循环迭代生成器</span></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> generator:</span><br><span class="line">    <span class="built_in">print</span>(value)  <span class="comment"># 输出: 2 1</span></span><br></pre></td></tr></table></figure><p>这里的 <code>countdown</code> 函数就是一个生成器函数，因为他有 <code>yield</code> 关键字，那生成器的运行逻辑是什么呢</p><p>首先创建生成器时，我们第一次进入生成器函数，将n复制为了5，然后不做其他操作</p><p>第一次调用 <code>next</code> 函数时，因为 n &#x3D;&#x3D; 5 &gt; 0 进入了 <code>while</code> 循环，然后到达 <code>yield</code> 关键字，<code>yield</code> 关键字后面的语句可以认为是上面迭代器类中的 <code>__next__</code> 函数的返回值，这里就返回了当前的 n 也就是 5 到函数外，然后被 <code>print()</code> 函数打印到终端</p><p>第二次调用 <code>next</code> 函数，就和第一次不一样了，是从 <code>yield</code> 关键字下面一行进入的函数，也就是 <code>n -= 1</code> ，n 的值变为 4，然后再进行 <code>while</code> 条件判断，符合条件，则到达 <code>yield</code> 关键字，将当前的 n 返回</p><p>后面几次的逻辑都一样，最后一次调用因为 n 已经为 0，则无法进入下一个 <code>yield</code>， 迭代结束</p><h2 id="生成器和迭代器的不同"><a href="#生成器和迭代器的不同" class="headerlink" title="生成器和迭代器的不同"></a>生成器和迭代器的不同</h2><p>迭代器必须在 <code>__next__</code> 函数中给出 <code>StopIteration</code> 异常，用于结束迭代，但是生成器不需要，以用生成器计算斐波那契数列为例：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci</span>():</span><br><span class="line">    cur, nxt = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">yield</span> cur</span><br><span class="line">        cur, nxt = nxt, cur + nxt</span><br><span class="line"></span><br><span class="line">gen_fibonacci = fibonacci()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">next</span>(gen_fibonacci))</span><br></pre></td></tr></table></figure><p>这里可以看到，生成器 <code>fibonacci()</code> 中的是一个 <code>while True</code> 的无限循环，也就是我们可以无数次遍历这个生成器，每次会获得一个斐波那契数</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> 数据结构 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Centos7安装配置Mariadb</title>
       <link href="/posts/40278/"/>
       <url>/posts/40278/</url>
@@ -49,11 +70,11 @@
       
         <tags>
             
-            <tag> 数据库 </tag>
-            
             <tag> 前端 </tag>
             
             <tag> 后端 </tag>
+            
+            <tag> 数据库 </tag>
             
             <tag> Node.js </tag>
             
@@ -84,17 +105,17 @@
       
         <tags>
             
-            <tag> 数据库 </tag>
+            <tag> 爬虫 </tag>
             
             <tag> 前端 </tag>
             
             <tag> 后端 </tag>
             
+            <tag> 数据库 </tag>
+            
             <tag> Node.js </tag>
             
             <tag> Express </tag>
-            
-            <tag> 爬虫 </tag>
             
         </tags>
       
